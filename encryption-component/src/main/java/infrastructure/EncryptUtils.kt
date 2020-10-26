@@ -11,6 +11,7 @@ import java.security.MessageDigest
 import java.util.*
 
 object EncryptUtils {
+
     fun encrypt(data: String, publicKey: String): String {
         val rsa: Cipher
         var encryptedByte: ByteArray? = ByteArray(0)
@@ -37,26 +38,26 @@ object EncryptUtils {
         return String(decryptedByte!!)
     }
 
-    fun getPublicKey(base64PublicKey: String): PublicKey? {
-        var publicKey: PublicKey? = null
+    fun getPublicKey(base64PublicKey: String): PublicKey {
+        lateinit var publicKey: PublicKey
         try {
             val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(base64PublicKey.toByteArray()))
             val keyFactory = KeyFactory.getInstance("RSA")
             publicKey = keyFactory.generatePublic(keySpec)
         } catch (e: Exception) {
-            e.printStackTrace()
+            throw RuntimeException(e)
         }
         return publicKey
     }
 
-    fun getPrivateKey(base64PrivateKey: String): PrivateKey? {
-        var privateKey: PrivateKey? = null
+    fun getPrivateKey(base64PrivateKey: String): PrivateKey {
+        lateinit var privateKey: PrivateKey
         try {
             val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64PrivateKey.toByteArray()))
             val keyFactory = KeyFactory.getInstance("RSA")
             privateKey = keyFactory.generatePrivate(keySpec)
         } catch (e: Exception) {
-            e.printStackTrace()
+            throw RuntimeException(e)
         }
         return privateKey
     }
@@ -74,7 +75,7 @@ object EncryptUtils {
         return null
     }
 
-    fun verifySign(encryptedMessageHash: ByteArray?, message: String, publicKey: String): Boolean {
+    fun verifySign(encryptedMessageHash: ByteArray, message: String, publicKey: String): Boolean {
         try {
             val cipher = Cipher.getInstance("RSA")
             cipher.init(Cipher.DECRYPT_MODE, getPublicKey(publicKey))
@@ -88,4 +89,5 @@ object EncryptUtils {
         }
         return false
     }
+
 }

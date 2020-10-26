@@ -3,10 +3,14 @@ package action
 import EncryptMessage
 import infrastructure.EncryptUtils
 
+import action.EncryptFixture.aMessage
+import action.EncryptFixture.aPrivateKey
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class EncryptMessageTest {
+
     private lateinit var result: String
     private val encryptMessage = EncryptMessage()
 
@@ -17,10 +21,11 @@ class EncryptMessageTest {
     }
 
     private fun when_encrypt_using_RSA() {
-        result = encryptMessage.execute(EncryptFixture.aMessage, EncryptFixture.aPublicKey)
+        result = encryptMessage.execute(aMessage, EncryptFixture.aPublicKey)
     }
 
     private fun then_the_encrypted_data_is() {
-        Assertions.assertEquals(EncryptFixture.aMessage, EncryptUtils.decrypt(result, EncryptFixture.aPrivateKey))
+        Assertions.assertEquals(aMessage, EncryptUtils.decrypt(result, aPrivateKey))
     }
+
 }
