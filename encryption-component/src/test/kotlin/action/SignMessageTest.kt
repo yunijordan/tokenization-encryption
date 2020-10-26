@@ -9,10 +9,10 @@ import action.EncryptFixture.aPublicKey
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-class SignTest {
+class SignMessageTest {
 
     private lateinit var result: ByteArray
-    private val sign = Sign()
+    private val sign = SignMessage()
 
     @Test
     fun sign_successfully() {

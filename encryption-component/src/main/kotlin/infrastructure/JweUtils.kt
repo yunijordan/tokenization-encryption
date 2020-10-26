@@ -13,16 +13,15 @@ object JweUtils {
     fun jweCompactSerialization(
         publicKey: Key,
         message: String,
-        keyManagementAlgorithmIdentifiers: String
+        algorithmIdentifiers: String
     ): String {
         return try {
             val jwe = JsonWebEncryption()
-            jwe.algorithmHeaderValue = keyManagementAlgorithmIdentifiers
+            jwe.algorithmHeaderValue = algorithmIdentifiers
             jwe.encryptionMethodHeaderParameter = ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256
             jwe.payload = message
             jwe.key = publicKey
-            val iv = SecureRandom.getInstance("SHA1PRNG")
-            jwe.iv = iv.generateSeed(16)
+            jwe.iv = SecureRandom.getInstance("SHA1PRNG").generateSeed(16)
             jwe.compactSerialization
         } catch (e: Exception) {
             throw RuntimeException(e)

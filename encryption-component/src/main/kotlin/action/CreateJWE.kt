@@ -1,7 +1,7 @@
 package action
 
 import infrastructure.EncryptUtils.getPublicKey
-import infrastructure.EncryptUtils.sign
+import infrastructure.EncryptUtils.signMessage
 import infrastructure.JweUtils.jweCompactSerialization
 import java.util.*
 
@@ -10,10 +10,10 @@ class CreateJWE {
         publicKey: String,
         privateKey: String,
         message: String,
-        keyManagementAlgorithmIdentifier: String
+        algorithmIdentifier: String
     ): String {
         val jwePublicKey = getPublicKey(publicKey)
-        val signedMessage = Base64.getEncoder().encodeToString(sign(message, privateKey))
-        return jweCompactSerialization(jwePublicKey, signedMessage, keyManagementAlgorithmIdentifier)
+        val signedMessage = Base64.getEncoder().encodeToString(signMessage(message, privateKey))
+        return jweCompactSerialization(jwePublicKey, signedMessage, algorithmIdentifier)
     }
 }

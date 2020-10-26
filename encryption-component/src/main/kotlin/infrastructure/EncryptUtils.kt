@@ -12,26 +12,26 @@ import java.util.*
 
 object EncryptUtils {
 
-    fun encrypt(data: String, publicKey: String): String {
+    fun encrypt(message: String, publicKey: String): String {
         val rsa: Cipher
         var encryptedByte: ByteArray? = ByteArray(0)
         try {
             rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding")
             rsa.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKey))
-            encryptedByte = rsa.doFinal(data.toByteArray())
+            encryptedByte = rsa.doFinal(message.toByteArray())
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
         return Base64.getEncoder().encodeToString(encryptedByte)
     }
 
-    fun decrypt(data: String, privateKey: String): String {
+    fun decrypt(message: String, privateKey: String): String {
         val rsa: Cipher
         var decryptedByte: ByteArray? = ByteArray(0)
         try {
             rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding")
             rsa.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey))
-            decryptedByte = rsa.doFinal(Base64.getDecoder().decode(data.toByteArray()))
+            decryptedByte = rsa.doFinal(Base64.getDecoder().decode(message.toByteArray()))
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -62,7 +62,7 @@ object EncryptUtils {
         return privateKey
     }
 
-    fun sign(message: String, privateKey: String): ByteArray? {
+    fun signMessage(message: String, privateKey: String): ByteArray? {
         try {
             val md = MessageDigest.getInstance("SHA-256")
             val messageHash = md.digest(message.toByteArray())

@@ -3,8 +3,8 @@ import infrastructure.EncryptUtils
 
 class EncryptMessage {
 
-    fun execute(aValue: String, publicKeyStr: String): String {
-        return EncryptUtils.encrypt(aValue, publicKeyStr)
+    fun execute(message: String, publicKey: String): String {
+        return EncryptUtils.encrypt(message, publicKey)
     }
 
 }

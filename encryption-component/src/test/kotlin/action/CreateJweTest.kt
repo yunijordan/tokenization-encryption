@@ -7,7 +7,7 @@ import action.EncryptFixture.aPublicKey_2048
 import action.EncryptFixture.jwePrivateKey
 
 import infrastructure.JweUtils
-import infrastructure.EncryptUtils.sign
+import infrastructure.EncryptUtils.signMessage
 import infrastructure.EncryptUtils.verifySign
 
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
@@ -42,7 +42,7 @@ class CreateJweTest {
             JweUtils.jwePayload(jwePrivateKey, encryptedMessage, KeyManagementAlgorithmIdentifiers.RSA_OAEP_256)
         assertEquals(
             signedPayload,
-            Base64.getEncoder().encodeToString(sign(aMessage, aPrivateKey))
+            Base64.getEncoder().encodeToString(signMessage(aMessage, aPrivateKey))
         )
         assertTrue(
             verifySign(
