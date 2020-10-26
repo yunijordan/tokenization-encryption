@@ -2,11 +2,12 @@ package action
 
 import action.action.EncryptMessage
 import infrastructure.EncryptUtils
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class EncryptMessageTest {
-    private var result: String? = null
+    private lateinit var result: String
     private val encryptMessage = EncryptMessage()
 
     @Test
