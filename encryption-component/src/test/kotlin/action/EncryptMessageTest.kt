@@ -1,6 +1,6 @@
 package action
 
-import action.action.EncryptMessage
+import EncryptMessage
 import infrastructure.EncryptUtils
 
 import org.junit.jupiter.api.Assertions
