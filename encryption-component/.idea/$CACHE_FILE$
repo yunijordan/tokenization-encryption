@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$USER_HOME$/dev/core/cms-console/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/core/ems-console/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/core/ems/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/exercises/kata-bank-chiu" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/omni/audit/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/omni/brm/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/omni/idm/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/seed-web-native/web-native-seed/api" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/studio/legacy" value="PREVIEW" />
+        <entry key="$USER_HOME$/dev/studio/sigma" value="PREVIEW" />
+        <entry key="$USER_HOME$/maxee/katas/gameoflifekata/gameOfLife" value="PREVIEW" />
+        <entry key="$USER_HOME$/maxee/katas/yahtzee" value="PREVIEW" />
+        <entry key="$USER_HOME$/maxee/uade/uade-modelado/modelingAndSimulation" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+</project>
