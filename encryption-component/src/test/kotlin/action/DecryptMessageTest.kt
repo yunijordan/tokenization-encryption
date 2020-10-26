@@ -2,7 +2,7 @@ package action
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.anEncryptedValue
+import action.EncryptFixture.anEncryptedMessage
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -19,7 +19,7 @@ class DecryptMessageTest {
     }
 
     private fun when_decrypt_using_RSA() {
-        result = decryptMessage.execute(anEncryptedValue, aPrivateKey)
+        result = decryptMessage.execute(anEncryptedMessage, aPrivateKey)
     }
 
     private fun then_the_decrypted_data_is() {

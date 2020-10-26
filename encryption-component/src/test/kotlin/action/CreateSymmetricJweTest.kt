@@ -1,7 +1,7 @@
 package action
 
 import action.EncryptFixture.aMessage
-import action.EncryptFixture.asymmetricKey
+import action.EncryptFixture.aSymmetricKey
 import action.EncryptFixture.symmetricKey
 import infrastructure.JweUtils.jwePayload
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
@@ -19,7 +19,7 @@ class CreateSymmetricJweTest {
 
     private fun when_we_build_a_jwe_object() {
         encryptedMessage = createSymmetricJWE.execute(
-            asymmetricKey,
+            aSymmetricKey,
             aMessage,
             KeyManagementAlgorithmIdentifiers.A128KW
         )
