@@ -2,40 +2,40 @@ package infrastructure
 
 import javax.crypto.Cipher
 import java.lang.Exception
-import java.security.KeyFactory
-import java.security.PublicKey
+import java.security.*
 import java.security.spec.X509EncodedKeySpec
-import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
-import java.security.MessageDigest
 import java.util.*
 
 object EncryptUtils {
 
     fun encrypt(message: String, publicKey: String): String {
-        val rsa: Cipher
-        var encryptedByte: ByteArray? = ByteArray(0)
-        try {
-            rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-            rsa.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKey))
-            encryptedByte = rsa.doFinal(message.toByteArray())
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        val encryptedByte: ByteArray? = cipherMessage(
+            message.toByteArray(),
+            Cipher.ENCRYPT_MODE,
+            getPublicKey(publicKey))
         return Base64.getEncoder().encodeToString(encryptedByte)
     }
 
     fun decrypt(message: String, privateKey: String): String {
+        val decryptedByte: ByteArray? = cipherMessage(
+            Base64.getDecoder().decode(message.toByteArray()),
+            Cipher.DECRYPT_MODE,
+            getPrivateKey(privateKey))
+        return String(decryptedByte!!)
+    }
+
+    private fun cipherMessage(message: ByteArray, cipherMode: Int, key: Key): ByteArray? {
         val rsa: Cipher
-        var decryptedByte: ByteArray? = ByteArray(0)
+        var encryptedByte: ByteArray? = ByteArray(0)
         try {
             rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-            rsa.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey))
-            decryptedByte = rsa.doFinal(Base64.getDecoder().decode(message.toByteArray()))
+            rsa.init(cipherMode, key)
+            encryptedByte = rsa.doFinal(message)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
-        return String(decryptedByte!!)
+        return encryptedByte
     }
 
     fun getPublicKey(base64PublicKey: String): PublicKey {
