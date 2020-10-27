@@ -4,6 +4,7 @@ import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aPublicKey
 import action.EncryptFixture.aPublicKey_2048
+import action.EncryptFixture.aTransformation
 import action.EncryptFixture.anAlgorithm
 import action.EncryptFixture.jwePrivateKey
 
@@ -35,7 +36,8 @@ class CreateJweTest {
             aPrivateKey,
             aMessage,
             anAlgorithm,
-            KeyManagementAlgorithmIdentifiers.RSA_OAEP_256
+            KeyManagementAlgorithmIdentifiers.RSA_OAEP_256,
+            aTransformation
         )
     }
 
@@ -44,14 +46,15 @@ class CreateJweTest {
             JweUtils.jwePayload(jwePrivateKey, encryptedMessage, KeyManagementAlgorithmIdentifiers.RSA_OAEP_256)
         assertEquals(
             signedPayload,
-            Base64.getEncoder().encodeToString(signMessage(aMessage, aPrivateKey, anAlgorithm))
+            Base64.getEncoder().encodeToString(signMessage(aMessage, aPrivateKey, anAlgorithm, aTransformation))
         )
         assertTrue(
             verifySign(
                 Base64.getDecoder().decode(signedPayload),
                 aMessage,
                 aPublicKey,
-                anAlgorithm
+                anAlgorithm,
+                aTransformation
             )
         )
     }

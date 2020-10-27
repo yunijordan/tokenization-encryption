@@ -13,9 +13,14 @@ import javax.crypto.Cipher
 
 object EncryptUtils {
 
-    fun encrypt(message: String, publicKey: String, transformation: String, algorithm: String): String {
+    fun encrypt(
+        message: String,
+        publicKey: String,
+        transformation: String,
+        algorithm: String
+    ): String {
         val encryptedByte: ByteArray? = cipherMessage(
-                transformation,
+            transformation,
             message.toByteArray(),
             Cipher.ENCRYPT_MODE,
             getPublicKey(publicKey, algorithm)
@@ -23,9 +28,14 @@ object EncryptUtils {
         return Base64.getEncoder().encodeToString(encryptedByte)
     }
 
-    fun decrypt(message: String, privateKey: String, transformation: String, algorithm: String): String {
+    fun decrypt(
+        message: String,
+        privateKey: String,
+        transformation: String,
+        algorithm: String
+    ): String {
         val decryptedByte: ByteArray? = cipherMessage(
-                transformation,
+            transformation,
             Base64.getDecoder().decode(message.toByteArray()),
             Cipher.DECRYPT_MODE,
             getPrivateKey(privateKey, algorithm)
@@ -36,23 +46,32 @@ object EncryptUtils {
     fun getPublicKey(base64Key: String, algorithm: String): Key {
         val keyFactory = KeyFactory.getInstance(algorithm)
         val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(base64Key.toByteArray()))
-        return getKey(keySpec,keyFactory::generatePublic)
+        return getKey(keySpec, keyFactory::generatePublic)
     }
 
-    fun getPrivateKey(base64Key: String, algorithm: String): Key {
+    fun getPrivateKey(
+        base64Key: String,
+        algorithm: String
+    ): Key {
         val keyFactory = KeyFactory.getInstance(algorithm)
         val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64Key.toByteArray()))
         return getKey(keySpec, keyFactory::generatePrivate)
     }
 
-    fun signMessage(message: String, privateKey: String, algorithm: String): ByteArray? {
+    fun signMessage(
+        message: String,
+        privateKey: String,
+        algorithm: String,
+        transformation: String
+    ): ByteArray? {
         try {
             val hashedMessage = hashMessage(message)
             return cipherMessage(
-                "RSA",
+                transformation,
                 hashedMessage,
                 Cipher.ENCRYPT_MODE,
-                getPrivateKey(privateKey, algorithm))
+                getPrivateKey(privateKey, algorithm)
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -63,14 +82,17 @@ object EncryptUtils {
         encryptedMessageHash: ByteArray,
         message: String,
         publicKey: String,
-        algorithm: String): Boolean {
+        algorithm: String,
+        transformation: String
+    ): Boolean {
         try {
             val hashedMessage = hashMessage(message)
             val cipherHashedMessage = cipherMessage(
-                "RSA",
+                transformation,
                 encryptedMessageHash,
                 Cipher.DECRYPT_MODE,
-                getPublicKey(publicKey, algorithm))
+                getPublicKey(publicKey, algorithm)
+            )
             return Arrays.equals(hashedMessage, cipherHashedMessage)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -83,10 +105,11 @@ object EncryptUtils {
     }
 
     private fun cipherMessage(
-            transformation: String,
-            message: ByteArray,
-            cipherMode: Int,
-            key: Key): ByteArray? {
+        transformation: String,
+        message: ByteArray,
+        cipherMode: Int,
+        key: Key
+    ): ByteArray? {
         val rsa: Cipher
         var encryptedByte: ByteArray? = ByteArray(0)
         try {
