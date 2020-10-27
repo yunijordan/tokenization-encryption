@@ -10,13 +10,14 @@ class CreateJWE {
         publicKey: String,
         privateKey: String,
         message: String,
-        algorithm: String,
+        keyAlgorithm: String,
         algorithmIdentifier: String,
-        transformation: String,
+        cipherTransformation: String,
         hashAlgorithm: String
     ): String {
-        val jwePublicKey = getPublicKey(publicKey, algorithm)
-        val signedMessage = Base64.getEncoder().encodeToString(signMessage(message, privateKey, algorithm, transformation, hashAlgorithm))
+        val jwePublicKey = getPublicKey(publicKey, keyAlgorithm)
+        val signedMessage = Base64.getEncoder().encodeToString(
+            signMessage(message, privateKey, keyAlgorithm, cipherTransformation, hashAlgorithm))
         return jweCompactSerialization(jwePublicKey, signedMessage, algorithmIdentifier)
     }
 }

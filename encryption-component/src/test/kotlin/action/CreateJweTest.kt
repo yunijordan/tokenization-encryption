@@ -7,6 +7,7 @@ import action.EncryptFixture.aPublicKey
 import action.EncryptFixture.aPublicKey_2048
 import action.EncryptFixture.aTransformation
 import action.EncryptFixture.aCipherAlgorithm
+import action.EncryptFixture.aKeyAlgorithm
 import action.EncryptFixture.anAlgorithmIdentifier
 import action.EncryptFixture.jwePrivateKey
 
@@ -37,7 +38,7 @@ class CreateJweTest {
             aPublicKey_2048,
             aPrivateKey,
             aMessage,
-            aCipherAlgorithm,
+            aKeyAlgorithm,
             anAlgorithmIdentifier,
             aTransformation,
             aHashAlgorithm
@@ -50,7 +51,12 @@ class CreateJweTest {
         assertEquals(
             signedPayload,
             Base64.getEncoder()
-                .encodeToString(signMessage(aMessage, aPrivateKey, aCipherAlgorithm, aTransformation, aHashAlgorithm))
+                .encodeToString(signMessage(
+                    aMessage,
+                    aPrivateKey,
+                    aCipherAlgorithm,
+                    aCipherAlgorithm,
+                    aHashAlgorithm))
         )
         assertTrue(
             verifySign(

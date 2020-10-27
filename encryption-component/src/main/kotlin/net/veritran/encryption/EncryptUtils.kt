@@ -3,8 +3,6 @@ package net.veritran.encryption
 import java.security.Key
 import java.security.KeyFactory
 import java.security.MessageDigest
-import java.security.spec.EncodedKeySpec
-import java.security.spec.KeySpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
@@ -33,13 +31,13 @@ object EncryptUtils {
         cipherTransformation: String,
         keyAlgorithm: String
     ): String {
-        val decryptedByte: ByteArray? = cipherMessage(
+        val decryptedByte = cipherMessage(
             cipherTransformation,
             Base64.getDecoder().decode(message.toByteArray()),
             Cipher.DECRYPT_MODE,
             getPrivateKey(privateKey, keyAlgorithm)
         )
-        return String(decryptedByte!!)
+        return String(decryptedByte)
     }
 
     fun getPublicKey(key: String, keyAlgorithm: String): Key {
@@ -57,22 +55,16 @@ object EncryptUtils {
     fun signMessage(
         message: String,
         privateKey: String,
-        algorithm: String,
-        transformation: String,
+        keyAlgorithm: String,
+        cipherTransformation: String,
         hashAlgorithm: String
-    ): ByteArray? {
-        try {
-            val hashedMessage = hashMessage(message, hashAlgorithm)
-            return cipherMessage(
-                transformation,
-                hashedMessage,
-                Cipher.ENCRYPT_MODE,
-                getPrivateKey(privateKey, algorithm)
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
+    ): ByteArray {
+        val hashedMessage = hashMessage(message, hashAlgorithm)
+        return cipherMessage(
+            cipherTransformation,
+            hashedMessage,
+            Cipher.ENCRYPT_MODE,
+            getPrivateKey(privateKey, keyAlgorithm))
     }
 
     fun verifySign(
@@ -83,19 +75,14 @@ object EncryptUtils {
         transformation: String,
         hashAlgorithm: String
     ): Boolean {
-        try {
-            val hashedMessage = hashMessage(message, hashAlgorithm)
-            val cipherHashedMessage = cipherMessage(
-                transformation,
-                encryptedMessageHash,
-                Cipher.DECRYPT_MODE,
-                getPublicKey(publicKey, algorithm)
-            )
-            return hashedMessage.contentEquals(cipherHashedMessage)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
+        val cipherHashedMessage = cipherMessage(
+            transformation,
+            encryptedMessageHash,
+            Cipher.DECRYPT_MODE,
+            getPublicKey(publicKey, algorithm)
+        )
+        val hashedMessage = hashMessage(message, hashAlgorithm)
+        return hashedMessage.contentEquals(cipherHashedMessage)
     }
 
     private fun cipherMessage(
