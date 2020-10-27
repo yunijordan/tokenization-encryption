@@ -45,16 +45,13 @@ object EncryptUtils {
     fun getPublicKey(key: String, keyAlgorithm: String): Key {
         val keyFactory = KeyFactory.getInstance(keyAlgorithm)
         val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(key.toByteArray()))
-        return getKey(keySpec, keyFactory::generatePublic)
+        return keyFactory.generatePublic(keySpec)
     }
 
-    fun getPrivateKey(
-        key: String,
-        keyAlgorithm: String
-    ): Key {
+    fun getPrivateKey(key: String, keyAlgorithm: String): Key {
         val keyFactory = KeyFactory.getInstance(keyAlgorithm)
         val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(key.toByteArray()))
-        return getKey(keySpec, keyFactory::generatePrivate)
+        return keyFactory.generatePrivate(keySpec)
     }
 
     fun signMessage(
@@ -99,10 +96,6 @@ object EncryptUtils {
             e.printStackTrace()
         }
         return false
-    }
-
-    private fun getKey(keySpec: EncodedKeySpec, generateKey: (keySpec: KeySpec) -> Key): Key {
-        return generateKey(keySpec)
     }
 
     private fun cipherMessage(
