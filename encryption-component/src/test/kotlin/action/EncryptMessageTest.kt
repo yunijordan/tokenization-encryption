@@ -1,7 +1,7 @@
 package action
 
-import EncryptMessage
-import infrastructure.EncryptUtils
+import net.veritran.encryption.EncryptMessage
+import net.veritran.encryption.EncryptUtils
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey

@@ -1,7 +1,5 @@
-package action
+package net.veritran.encryption
 
-import infrastructure.EncryptUtils
-import infrastructure.JweUtils
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 
 class UnwrapJWE {

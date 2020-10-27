@@ -5,6 +5,7 @@ import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.anEncryptedMessage
 import action.EncryptFixture.pkcs1paddingTransformation
+import net.veritran.encryption.DecryptMessage
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

@@ -1,13 +1,14 @@
 package action
 
 import action.EncryptFixture.aHashAlgorithm
-import infrastructure.EncryptUtils.verifySign
+import net.veritran.encryption.EncryptUtils.verifySign
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aPublicKey
 import action.EncryptFixture.aTransformation
 import action.EncryptFixture.aCipherAlgorithm
+import net.veritran.encryption.SignMessage
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

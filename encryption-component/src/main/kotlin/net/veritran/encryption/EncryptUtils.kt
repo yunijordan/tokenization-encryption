@@ -1,4 +1,4 @@
-package infrastructure
+package net.veritran.encryption
 
 import java.security.Key
 import java.security.KeyFactory
@@ -112,7 +112,7 @@ object EncryptUtils {
         key: Key
     ): ByteArray? {
         val rsa: Cipher
-        var encryptedByte: ByteArray? = ByteArray(0)
+        var encryptedByte: ByteArray = ByteArray(0)
         try {
             rsa = Cipher.getInstance(transformation)
             rsa.init(cipherMode, key)

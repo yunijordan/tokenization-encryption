@@ -3,7 +3,8 @@ package action
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aSymmetricKey
 import action.EncryptFixture.symmetricKey
-import infrastructure.JweUtils.jwePayload
+import net.veritran.encryption.JweUtils.jwePayload
+import net.veritran.encryption.CreateSymmetricJWE
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

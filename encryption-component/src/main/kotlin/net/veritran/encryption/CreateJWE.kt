@@ -1,8 +1,8 @@
-package action
+package net.veritran.encryption
 
-import infrastructure.EncryptUtils.getPublicKey
-import infrastructure.EncryptUtils.signMessage
-import infrastructure.JweUtils.jweCompactSerialization
+import net.veritran.encryption.EncryptUtils.getPublicKey
+import net.veritran.encryption.EncryptUtils.signMessage
+import net.veritran.encryption.JweUtils.jweCompactSerialization
 import java.util.*
 
 class CreateJWE {

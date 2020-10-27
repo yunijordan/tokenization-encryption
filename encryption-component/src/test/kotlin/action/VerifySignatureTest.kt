@@ -6,6 +6,7 @@ import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPublicKey
 import action.EncryptFixture.aTransformation
 import action.EncryptFixture.aCipherAlgorithm
+import net.veritran.encryption.VerifySignature
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

@@ -1,5 +1,4 @@
-
-import infrastructure.EncryptUtils
+package net.veritran.encryption
 
 class EncryptMessage {
 

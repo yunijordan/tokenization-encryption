@@ -1,4 +1,4 @@
-package infrastructure
+package net.veritran.encryption
 
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jwe.ContentEncryptionAlgorithmIdentifiers

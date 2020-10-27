@@ -1,6 +1,6 @@
-package action
+package net.veritran.encryption
 
-import infrastructure.EncryptUtils.verifySign
+import net.veritran.encryption.EncryptUtils.verifySign
 
 class VerifySignature {
 
