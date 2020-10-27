@@ -1,11 +1,14 @@
 package infrastructure
 
-import javax.crypto.Cipher
-import java.lang.Exception
-import java.security.*
-import java.security.spec.X509EncodedKeySpec
+import java.security.Key
+import java.security.KeyFactory
+import java.security.MessageDigest
+import java.security.spec.EncodedKeySpec
+import java.security.spec.KeySpec
 import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.X509EncodedKeySpec
 import java.util.*
+import javax.crypto.Cipher
 
 object EncryptUtils {
 
@@ -13,7 +16,8 @@ object EncryptUtils {
         val encryptedByte: ByteArray? = cipherMessage(
             message.toByteArray(),
             Cipher.ENCRYPT_MODE,
-            getPublicKey(publicKey))
+            getPublicKey(publicKey)
+        )
         return Base64.getEncoder().encodeToString(encryptedByte)
     }
 
@@ -21,7 +25,8 @@ object EncryptUtils {
         val decryptedByte: ByteArray? = cipherMessage(
             Base64.getDecoder().decode(message.toByteArray()),
             Cipher.DECRYPT_MODE,
-            getPrivateKey(privateKey))
+            getPrivateKey(privateKey)
+        )
         return String(decryptedByte!!)
     }
 
@@ -38,28 +43,20 @@ object EncryptUtils {
         return encryptedByte
     }
 
-    fun getPublicKey(base64PublicKey: String): PublicKey {
-        lateinit var publicKey: PublicKey
-        try {
-            val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(base64PublicKey.toByteArray()))
-            val keyFactory = KeyFactory.getInstance("RSA")
-            publicKey = keyFactory.generatePublic(keySpec)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-        return publicKey
+    fun getPublicKey(base64Key: String): Key {
+        val keyFactory = KeyFactory.getInstance("RSA")
+        val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(base64Key.toByteArray()))
+        return getKey(keySpec,keyFactory::generatePublic)
     }
 
-    fun getPrivateKey(base64PrivateKey: String): PrivateKey {
-        lateinit var privateKey: PrivateKey
-        try {
-            val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64PrivateKey.toByteArray()))
-            val keyFactory = KeyFactory.getInstance("RSA")
-            privateKey = keyFactory.generatePrivate(keySpec)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-        return privateKey
+    fun getPrivateKey(base64Key: String): Key {
+        val keyFactory = KeyFactory.getInstance("RSA")
+        val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64Key.toByteArray()))
+        return getKey(keySpec, keyFactory::generatePrivate)
+    }
+
+    private fun getKey(keySpec: EncodedKeySpec, getKeyLmd: (keySpec: KeySpec) -> Key): Key {
+        return getKeyLmd(keySpec)
     }
 
     fun signMessage(message: String, privateKey: String): ByteArray? {
