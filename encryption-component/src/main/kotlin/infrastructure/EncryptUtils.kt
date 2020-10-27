@@ -1,6 +1,5 @@
 package infrastructure
 
-import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import java.security.Key
 import java.security.KeyFactory
 import java.security.MessageDigest
@@ -62,10 +61,11 @@ object EncryptUtils {
         message: String,
         privateKey: String,
         algorithm: String,
-        transformation: String
+        transformation: String,
+        hashAlgorithm: String
     ): ByteArray? {
         try {
-            val hashedMessage = hashMessage(message)
+            val hashedMessage = hashMessage(message, hashAlgorithm)
             return cipherMessage(
                 transformation,
                 hashedMessage,
@@ -83,10 +83,11 @@ object EncryptUtils {
         message: String,
         publicKey: String,
         algorithm: String,
-        transformation: String
+        transformation: String,
+        hashAlgorithm: String
     ): Boolean {
         try {
-            val hashedMessage = hashMessage(message)
+            val hashedMessage = hashMessage(message, hashAlgorithm)
             val cipherHashedMessage = cipherMessage(
                 transformation,
                 encryptedMessageHash,
@@ -122,8 +123,8 @@ object EncryptUtils {
         return encryptedByte
     }
 
-    private fun hashMessage(message: String): ByteArray {
-        val messageDigest = MessageDigest.getInstance("SHA-256")
+    private fun hashMessage(message: String, algorithm: String): ByteArray {
+        val messageDigest = MessageDigest.getInstance(algorithm)
         return messageDigest.digest(message.toByteArray())
     }
 

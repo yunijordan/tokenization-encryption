@@ -1,11 +1,13 @@
 package action
 
+import action.EncryptFixture.aHashAlgorithm
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aPublicKey
 import action.EncryptFixture.aPublicKey_2048
 import action.EncryptFixture.aTransformation
-import action.EncryptFixture.anAlgorithm
+import action.EncryptFixture.aCipherAlgorithm
+import action.EncryptFixture.anAlgorithmIdentifier
 import action.EncryptFixture.jwePrivateKey
 
 import infrastructure.JweUtils
@@ -35,26 +37,29 @@ class CreateJweTest {
             aPublicKey_2048,
             aPrivateKey,
             aMessage,
-            anAlgorithm,
-            KeyManagementAlgorithmIdentifiers.RSA_OAEP_256,
-            aTransformation
+            aCipherAlgorithm,
+            anAlgorithmIdentifier,
+            aTransformation,
+            aHashAlgorithm
         )
     }
 
     private fun then_we_have_an_asymmetric_encrypted_payload() {
         val signedPayload: String =
-            JweUtils.jwePayload(jwePrivateKey, encryptedMessage, KeyManagementAlgorithmIdentifiers.RSA_OAEP_256)
+            JweUtils.jwePayload(jwePrivateKey, encryptedMessage, anAlgorithmIdentifier)
         assertEquals(
             signedPayload,
-            Base64.getEncoder().encodeToString(signMessage(aMessage, aPrivateKey, anAlgorithm, aTransformation))
+            Base64.getEncoder()
+                .encodeToString(signMessage(aMessage, aPrivateKey, aCipherAlgorithm, aTransformation, aHashAlgorithm))
         )
         assertTrue(
             verifySign(
                 Base64.getDecoder().decode(signedPayload),
                 aMessage,
                 aPublicKey,
-                anAlgorithm,
-                aTransformation
+                aCipherAlgorithm,
+                aTransformation,
+                aHashAlgorithm
             )
         )
     }

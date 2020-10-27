@@ -9,8 +9,9 @@ class VerifySignature {
         aValue: String,
         publicKey: String,
         algorithm: String,
-        transformation: String
+        transformation: String,
+        hashAlgorithm: String
     ): Boolean {
-        return verifySign(messageHash, aValue, publicKey, algorithm, transformation)
+        return verifySign(messageHash, aValue, publicKey, algorithm, transformation, hashAlgorithm)
     }
 }

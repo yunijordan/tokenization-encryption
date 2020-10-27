@@ -5,7 +5,7 @@ import infrastructure.EncryptUtils
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.anAlgorithm
+import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.pkcs1paddingTransformation
 
 import org.junit.jupiter.api.Assertions
@@ -23,11 +23,11 @@ class EncryptMessageTest {
     }
 
     private fun when_encrypt_using_RSA() {
-        result = encryptMessage.execute(aMessage, EncryptFixture.aPublicKey, pkcs1paddingTransformation, anAlgorithm)
+        result = encryptMessage.execute(aMessage, EncryptFixture.aPublicKey, pkcs1paddingTransformation, aCipherAlgorithm)
     }
 
     private fun then_the_encrypted_data_is() {
-        Assertions.assertEquals(aMessage, EncryptUtils.decrypt(result, aPrivateKey, pkcs1paddingTransformation, anAlgorithm))
+        Assertions.assertEquals(aMessage, EncryptUtils.decrypt(result, aPrivateKey, pkcs1paddingTransformation, aCipherAlgorithm))
     }
 
 }
