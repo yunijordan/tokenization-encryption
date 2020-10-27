@@ -12,9 +12,9 @@ import javax.crypto.Cipher
 
 object EncryptUtils {
 
-    fun encrypt(message: String, publicKey: String): String {
+    fun encrypt(message: String, publicKey: String, transformation: String): String {
         val encryptedByte: ByteArray? = cipherMessage(
-                "RSA/ECB/PKCS1Padding",
+                transformation,
             message.toByteArray(),
             Cipher.ENCRYPT_MODE,
             getPublicKey(publicKey)
@@ -22,9 +22,9 @@ object EncryptUtils {
         return Base64.getEncoder().encodeToString(encryptedByte)
     }
 
-    fun decrypt(message: String, privateKey: String): String {
+    fun decrypt(message: String, privateKey: String, transformation: String): String {
         val decryptedByte: ByteArray? = cipherMessage(
-                "RSA/ECB/PKCS1Padding",
+                transformation,
             Base64.getDecoder().decode(message.toByteArray()),
             Cipher.DECRYPT_MODE,
             getPrivateKey(privateKey)
@@ -42,10 +42,6 @@ object EncryptUtils {
         val keyFactory = KeyFactory.getInstance("RSA")
         val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64Key.toByteArray()))
         return getKey(keySpec, keyFactory::generatePrivate)
-    }
-
-    private fun getKey(keySpec: EncodedKeySpec, generateKey: (keySpec: KeySpec) -> Key): Key {
-        return generateKey(keySpec)
     }
 
     fun signMessage(message: String, privateKey: String): ByteArray? {
@@ -67,6 +63,10 @@ object EncryptUtils {
             e.printStackTrace()
         }
         return false
+    }
+
+    private fun getKey(keySpec: EncodedKeySpec, generateKey: (keySpec: KeySpec) -> Key): Key {
+        return generateKey(keySpec)
     }
 
     private fun cipherMessage(transformation: String, message: ByteArray, cipherMode: Int, key: Key): ByteArray? {

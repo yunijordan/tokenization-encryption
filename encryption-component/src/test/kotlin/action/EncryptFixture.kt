@@ -9,6 +9,7 @@ import java.util.*
 
 object EncryptFixture {
     const val aMessage = "a value"
+    const val pkcs1paddingTransformation = "RSA/ECB/PKCS1Padding"
     const val anEncryptedMessage =
         "V/n5n2+hTtXQdewKVEbHA7fZp62NoHWTQP8g6UqUqiQw1D2n1girmHw9sl4tinGEVFLk0kdn+3SG8sMEcrLL03sQ5upBECarwBD6QEiBqkHaNNy639j5/iCXiIwHIaLShGFExdtKsNyBMas7zsscFQR1M4y1nS68NDjxecb18ZY="
     val aHashedMessage: ByteArray = Base64.getDecoder()
