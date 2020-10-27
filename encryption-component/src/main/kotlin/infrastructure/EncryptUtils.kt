@@ -14,6 +14,7 @@ object EncryptUtils {
 
     fun encrypt(message: String, publicKey: String): String {
         val encryptedByte: ByteArray? = cipherMessage(
+                "RSA/ECB/PKCS1Padding",
             message.toByteArray(),
             Cipher.ENCRYPT_MODE,
             getPublicKey(publicKey)
@@ -23,24 +24,12 @@ object EncryptUtils {
 
     fun decrypt(message: String, privateKey: String): String {
         val decryptedByte: ByteArray? = cipherMessage(
+                "RSA/ECB/PKCS1Padding",
             Base64.getDecoder().decode(message.toByteArray()),
             Cipher.DECRYPT_MODE,
             getPrivateKey(privateKey)
         )
         return String(decryptedByte!!)
-    }
-
-    private fun cipherMessage(message: ByteArray, cipherMode: Int, key: Key): ByteArray? {
-        val rsa: Cipher
-        var encryptedByte: ByteArray? = ByteArray(0)
-        try {
-            rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-            rsa.init(cipherMode, key)
-            encryptedByte = rsa.doFinal(message)
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-        return encryptedByte
     }
 
     fun getPublicKey(base64Key: String): Key {
@@ -55,17 +44,14 @@ object EncryptUtils {
         return getKey(keySpec, keyFactory::generatePrivate)
     }
 
-    private fun getKey(keySpec: EncodedKeySpec, getKeyLmd: (keySpec: KeySpec) -> Key): Key {
-        return getKeyLmd(keySpec)
+    private fun getKey(keySpec: EncodedKeySpec, generateKey: (keySpec: KeySpec) -> Key): Key {
+        return generateKey(keySpec)
     }
 
     fun signMessage(message: String, privateKey: String): ByteArray? {
         try {
-            val md = MessageDigest.getInstance("SHA-256")
-            val messageHash = md.digest(message.toByteArray())
-            val cipher = Cipher.getInstance("RSA")
-            cipher.init(Cipher.ENCRYPT_MODE, getPrivateKey(privateKey))
-            return cipher.doFinal(messageHash)
+            val hashedMessage = hashMessage(message)
+            return cipherMessage("RSA", hashedMessage, Cipher.ENCRYPT_MODE, getPrivateKey(privateKey))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -74,17 +60,31 @@ object EncryptUtils {
 
     fun verifySign(encryptedMessageHash: ByteArray, message: String, publicKey: String): Boolean {
         try {
-            val cipher = Cipher.getInstance("RSA")
-            cipher.init(Cipher.DECRYPT_MODE, getPublicKey(publicKey))
-            val decryptedMessageHash = cipher.doFinal(encryptedMessageHash)
-            val messageBytes = message.toByteArray()
-            val md = MessageDigest.getInstance("SHA-256")
-            val newMessageHash = md.digest(messageBytes)
-            return Arrays.equals(decryptedMessageHash, newMessageHash)
+            val hashedMessage = hashMessage(message)
+            val cipherHashedMessage = cipherMessage("RSA", encryptedMessageHash, Cipher.DECRYPT_MODE, getPublicKey(publicKey))
+            return Arrays.equals(hashedMessage, cipherHashedMessage)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return false
+    }
+
+    private fun cipherMessage(transformation: String, message: ByteArray, cipherMode: Int, key: Key): ByteArray? {
+        val rsa: Cipher
+        var encryptedByte: ByteArray? = ByteArray(0)
+        try {
+            rsa = Cipher.getInstance(transformation)
+            rsa.init(cipherMode, key)
+            encryptedByte = rsa.doFinal(message)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return encryptedByte
+    }
+
+    private fun hashMessage(message: String): ByteArray {
+        val messageDigest = MessageDigest.getInstance("SHA-256")
+        return messageDigest.digest(message.toByteArray())
     }
 
 }
