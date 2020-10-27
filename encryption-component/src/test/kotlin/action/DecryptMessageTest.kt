@@ -4,7 +4,8 @@ import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.anEncryptedMessage
-import action.EncryptFixture.pkcs1paddingTransformation
+import action.EncryptFixture.aCipherTransformation
+import action.EncryptFixture.aKeyAlgorithm
 import net.veritran.encryption.DecryptMessage
 
 import org.junit.jupiter.api.Assertions
@@ -22,7 +23,11 @@ class DecryptMessageTest {
     }
 
     private fun when_decrypt_using_RSA() {
-        result = decryptMessage.execute(anEncryptedMessage, aPrivateKey, pkcs1paddingTransformation, aCipherAlgorithm)
+        result = decryptMessage.execute(
+            anEncryptedMessage,
+            aPrivateKey,
+            aCipherTransformation,
+            aKeyAlgorithm)
     }
 
     private fun then_the_decrypted_data_is() {

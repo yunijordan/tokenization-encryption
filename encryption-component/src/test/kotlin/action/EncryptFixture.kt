@@ -10,8 +10,9 @@ import java.util.*
 
 object EncryptFixture {
     const val aMessage = "a value"
-    const val pkcs1paddingTransformation = "RSA/ECB/PKCS1Padding"
+    const val aCipherTransformation = "RSA/ECB/PKCS1Padding"
     const val aCipherAlgorithm = "RSA"
+    const val aKeyAlgorithm = "RSA"
     const val aTransformation = "RSA"
     const val aHashAlgorithm = "SHA-256"
     const val anAlgorithmIdentifier = KeyManagementAlgorithmIdentifiers.RSA_OAEP_256
