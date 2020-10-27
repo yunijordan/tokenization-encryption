@@ -5,9 +5,9 @@ import infrastructure.JweUtils
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 
 class UnwrapJWE {
-    fun execute(encryptedPayload: String, aPrivateKey: String): String {
+    fun execute(encryptedPayload: String, aPrivateKey: String, algorithm: String): String {
         return JweUtils.jwePayload(
-            EncryptUtils.getPrivateKey(aPrivateKey),
+            EncryptUtils.getPrivateKey(aPrivateKey, algorithm),
             encryptedPayload,
             KeyManagementAlgorithmIdentifiers.RSA_OAEP_256
         )

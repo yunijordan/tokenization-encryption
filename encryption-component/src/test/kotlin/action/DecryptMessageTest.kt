@@ -2,6 +2,7 @@ package action
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
+import action.EncryptFixture.anAlgorithm
 import action.EncryptFixture.anEncryptedMessage
 import action.EncryptFixture.pkcs1paddingTransformation
 
@@ -20,7 +21,7 @@ class DecryptMessageTest {
     }
 
     private fun when_decrypt_using_RSA() {
-        result = decryptMessage.execute(anEncryptedMessage, aPrivateKey, pkcs1paddingTransformation)
+        result = decryptMessage.execute(anEncryptedMessage, aPrivateKey, pkcs1paddingTransformation, anAlgorithm)
     }
 
     private fun then_the_decrypted_data_is() {
