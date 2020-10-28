@@ -5,7 +5,7 @@ import action.EncryptFixture.aSymmetricKey
 import action.EncryptFixture.symmetricKey
 import net.veritran.encryption.infrastructure.JweUtils.jwePayload
 import net.veritran.encryption.action.CreateSymmetricJWE
-import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
+import net.veritran.encryption.infrastructure.AlgorithmIdentifier
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -23,13 +23,13 @@ class CreateSymmetricJweTest {
         encryptedMessage = createSymmetricJWE.execute(
             aSymmetricKey,
             aMessage,
-            KeyManagementAlgorithmIdentifiers.A128KW
+            AlgorithmIdentifier.A128KW.value
         )
     }
 
     private fun then_we_have_an_encrypted_payload() {
         Assertions.assertEquals(
-            jwePayload(symmetricKey, encryptedMessage!!, KeyManagementAlgorithmIdentifiers.A128KW),
+            jwePayload(symmetricKey, encryptedMessage!!, AlgorithmIdentifier.A128KW.value),
             aMessage
         )
     }

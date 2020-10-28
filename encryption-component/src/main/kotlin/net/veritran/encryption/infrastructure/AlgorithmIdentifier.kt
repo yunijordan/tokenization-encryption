@@ -1,4 +1,4 @@
-package net.veritran.encryption.domain
+package net.veritran.encryption.infrastructure
 
 enum class AlgorithmIdentifier(val value: String) {
     RSA_OAEP_256("RSA-OAEP-256"),
