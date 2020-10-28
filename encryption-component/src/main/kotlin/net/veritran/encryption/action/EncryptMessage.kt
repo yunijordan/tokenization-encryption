@@ -2,7 +2,7 @@ package net.veritran.encryption.action
 
 import net.veritran.encryption.infrastructure.EncryptUtils
 
-class EncryptMessage {
+object EncryptMessage {
 
     fun execute(
         message: String,

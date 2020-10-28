@@ -25,7 +25,6 @@ import java.util.Base64
 class CreateJweTest {
 
     private lateinit var encryptedMessage: String
-    private val createJWE = CreateJWE()
 
     @Test
     fun encrypt_message_in_jwe_with_asymmetric_key() {
@@ -34,7 +33,7 @@ class CreateJweTest {
     }
 
     private fun when_we_build_a_jwe_object_with_public_key() {
-        encryptedMessage = createJWE.execute(
+        encryptedMessage = CreateJWE.execute(
             aPublicKey_2048,
             aPrivateKey,
             aMessage,

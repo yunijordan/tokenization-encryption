@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 class EncryptMessageTest {
 
     private lateinit var result: String
-    private val encryptMessage = EncryptMessage()
+
 
     @Test
     fun encrypt_successfully() {
@@ -24,7 +24,7 @@ class EncryptMessageTest {
 
     private fun when_encrypt_using_RSA() {
         result =
-            encryptMessage.execute(
+            EncryptMessage.execute(
                 aMessage,
                 EncryptFixture.aPublicKey,
                 aCipherTransformation,

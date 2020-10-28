@@ -1,14 +1,14 @@
-package net.veritran.encryption
+package net.veritran.encryption.providerrrr
 
 import net.veritran.encryption.action.EncryptMessage
 
-class Provider(private var encryptMessageAction: EncryptMessage = EncryptMessage()) {
+class Provider() {
     fun encryptMessage(
         message: String,
         publicKey: String,
         cipherTransformation: String,
         keyAlgorithm: String
     ) {
-        encryptMessageAction.execute(message, publicKey, cipherTransformation, keyAlgorithm)
+        EncryptMessage.execute(message, publicKey, cipherTransformation, keyAlgorithm)
     }
 }

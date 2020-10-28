@@ -5,7 +5,7 @@ import net.veritran.encryption.infrastructure.EncryptUtils.signMessage
 import net.veritran.encryption.infrastructure.JweUtils.jweCompactSerialization
 import java.util.*
 
-class CreateJWE {
+object CreateJWE {
     fun execute(
         publicKey: String,
         privateKey: String,
