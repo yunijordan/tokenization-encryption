@@ -1,4 +1,4 @@
-package net.veritran.encryption.providerrrr
+package net.veritran.encryption.provider
 
 import net.veritran.encryption.action.EncryptMessage
 
