@@ -1,4 +1,4 @@
-package net.veritran.encryption
+package net.veritran.encryption.infrastructure
 
 import java.security.Key
 import java.security.KeyFactory
@@ -64,7 +64,8 @@ object EncryptUtils {
             cipherTransformation,
             hashedMessage,
             Cipher.ENCRYPT_MODE,
-            getPrivateKey(privateKey, keyAlgorithm))
+            getPrivateKey(privateKey, keyAlgorithm)
+        )
     }
 
     fun verifySign(

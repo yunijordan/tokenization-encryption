@@ -1,6 +1,6 @@
-package net.veritran.encryption
+package net.veritran.encryption.action
 
-import net.veritran.encryption.EncryptUtils.signMessage
+import net.veritran.encryption.infrastructure.EncryptUtils.signMessage
 
 class SignMessage {
 

@@ -1,4 +1,6 @@
-package net.veritran.encryption
+package net.veritran.encryption.action
+
+import net.veritran.encryption.infrastructure.EncryptUtils
 
 class DecryptMessage {
 

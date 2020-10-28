@@ -11,10 +11,10 @@ import action.EncryptFixture.aKeyAlgorithm
 import action.EncryptFixture.anAlgorithmIdentifier
 import action.EncryptFixture.jwePrivateKey
 
-import net.veritran.encryption.JweUtils
-import net.veritran.encryption.EncryptUtils.signMessage
-import net.veritran.encryption.EncryptUtils.verifySign
-import net.veritran.encryption.CreateJWE
+import net.veritran.encryption.infrastructure.JweUtils
+import net.veritran.encryption.infrastructure.EncryptUtils.signMessage
+import net.veritran.encryption.infrastructure.EncryptUtils.verifySign
+import net.veritran.encryption.action.CreateJWE
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -1,6 +1,6 @@
-package net.veritran.encryption
+package net.veritran.encryption.action
 
-import net.veritran.encryption.JweUtils.jweCompactSerialization
+import net.veritran.encryption.infrastructure.JweUtils.jweCompactSerialization
 import org.jose4j.keys.AesKey
 import java.security.Key
 import java.util.*

@@ -1,11 +1,10 @@
 package action
 
-import net.veritran.encryption.EncryptMessage
-import net.veritran.encryption.EncryptUtils
+import net.veritran.encryption.action.EncryptMessage
+import net.veritran.encryption.infrastructure.EncryptUtils
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.aCipherTransformation
 import action.EncryptFixture.aKeyAlgorithm
 

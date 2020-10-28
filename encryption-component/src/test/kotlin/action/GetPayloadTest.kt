@@ -3,7 +3,7 @@ package action
 import action.EncryptFixture.aPrivateKey_2048
 import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.anEncryptedJwe
-import net.veritran.encryption.UnwrapJWE
+import net.veritran.encryption.action.UnwrapJWE
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

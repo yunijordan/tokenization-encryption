@@ -3,8 +3,8 @@ package action
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aSymmetricKey
 import action.EncryptFixture.symmetricKey
-import net.veritran.encryption.JweUtils.jwePayload
-import net.veritran.encryption.CreateSymmetricJWE
+import net.veritran.encryption.infrastructure.JweUtils.jwePayload
+import net.veritran.encryption.action.CreateSymmetricJWE
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 class CreateSymmetricJweTest {
     var encryptedMessage: String? = null
     var createSymmetricJWE = CreateSymmetricJWE()
+
     @Test
     fun encrypt_message_in_jwe_with_symmetric_key() {
         when_we_build_a_jwe_object()

@@ -1,6 +1,6 @@
 package action
 
-import net.veritran.encryption.EncryptUtils
+import net.veritran.encryption.infrastructure.EncryptUtils
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import org.jose4j.keys.AesKey
 import org.jose4j.lang.ByteUtil

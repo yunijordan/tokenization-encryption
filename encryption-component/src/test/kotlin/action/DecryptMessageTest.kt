@@ -2,11 +2,10 @@ package action
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aCipherAlgorithm
 import action.EncryptFixture.anEncryptedMessage
 import action.EncryptFixture.aCipherTransformation
 import action.EncryptFixture.aKeyAlgorithm
-import net.veritran.encryption.DecryptMessage
+import net.veritran.encryption.action.DecryptMessage
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
