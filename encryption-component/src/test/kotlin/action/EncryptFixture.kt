@@ -13,6 +13,7 @@ object EncryptFixture {
     const val aCipherTransformation = "RSA/ECB/PKCS1Padding"
     const val aCipherAlgorithm = "RSA"
     const val aKeyAlgorithm = "RSA"
+    const val anUnknownAlgorithm = "UnknownAlgorithm"
     const val aTransformation = "RSA"
     const val aHashAlgorithm = "SHA-256"
     val anAlgorithmIdentifier = AlgorithmIdentifier.RSA_OAEP_256

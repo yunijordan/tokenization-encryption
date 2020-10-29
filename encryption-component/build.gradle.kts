@@ -1,7 +1,7 @@
 version = "1.0.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.61"
+    id("org.jetbrains.kotlin.jvm") version "1.4.10"
     `java-library`
 }
 
@@ -16,6 +16,10 @@ dependencies {
     implementation("org.bitbucket.b_c:jose4j:0.7.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 tasks.jar {

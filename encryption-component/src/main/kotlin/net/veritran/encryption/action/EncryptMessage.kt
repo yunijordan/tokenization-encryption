@@ -10,7 +10,9 @@ object EncryptMessage {
         cipherTransformation: String,
         keyAlgorithm: String
     ): String {
-        return EncryptUtils.encrypt(message, publicKey, cipherTransformation, keyAlgorithm)
+        if (keyAlgorithm == "RSA")
+            return EncryptUtils.encrypt(message, publicKey, cipherTransformation, keyAlgorithm)
+        throw Exception("Unknown algorithm")
     }
 
 }

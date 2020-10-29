@@ -18,17 +18,24 @@ object JweUtils {
         return try {
             val jwe = JsonWebEncryption()
             jwe.algorithmHeaderValue = algorithmIdentifiers
-            jwe.encryptionMethodHeaderParameter = ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256
+            jwe.encryptionMethodHeaderParameter =
+                ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256
             jwe.payload = message
             jwe.key = publicKey
-            jwe.iv = SecureRandom.getInstance("SHA1PRNG").generateSeed(16)
+            jwe.iv = SecureRandom
+                .getInstance("SHA1PRNG")
+                .generateSeed(16)
             jwe.compactSerialization
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
     }
 
-    fun jwePayload(privateKey: Key, serializedJwe: String, algorithms: String): String {
+    fun jwePayload(
+        privateKey: Key,
+        serializedJwe: String,
+        algorithms: String
+    ): String {
         try {
             val jwe = JsonWebEncryption()
             jwe.setAlgorithmConstraints(
