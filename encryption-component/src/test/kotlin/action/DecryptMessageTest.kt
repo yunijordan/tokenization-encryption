@@ -3,7 +3,7 @@ package action
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.anEncryptedMessage
-import action.EncryptFixture.aCipherTransformation
+import action.EncryptFixture.aValidCipherTransformation
 import action.EncryptFixture.aKeyAlgorithm
 import net.veritran.encryption.action.DecryptMessage
 
@@ -25,7 +25,7 @@ class DecryptMessageTest {
         result = decryptMessage.execute(
             anEncryptedMessage,
             aPrivateKey,
-            aCipherTransformation,
+            aValidCipherTransformation,
             aKeyAlgorithm)
     }
 

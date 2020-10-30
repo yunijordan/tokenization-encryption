@@ -5,10 +5,10 @@ import net.veritran.encryption.infrastructure.EncryptUtils
 
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aCipherTransformation
+import action.EncryptFixture.aValidCipherTransformation
 import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.anInvalidAlgorithm
-import net.veritran.encryption.domain.error.InvalidAlgorithm
+import action.EncryptFixture.anInvalidValue
+import net.veritran.encryption.domain.error.DomainError
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
@@ -18,36 +18,44 @@ import kotlin.test.assertEquals
 class EncryptMessageTest {
 
     private lateinit var result: String
-    private lateinit var exception: Exception
 
     @Test
     fun encrypt_message_successfully() {
-        when_encrypt_message(aKeyAlgorithm)
+        when_encrypt_message(aKeyAlgorithm, aValidCipherTransformation)
         then_the_encrypted_data_is()
     }
 
     @Test()
-    fun encrypt_message_with_unknown_key_algorithm_fails() {
-        val exception: InvalidAlgorithm = assertThrows{
-            when_encrypt_message(anInvalidAlgorithm)
+    fun encrypt_message_with_invalid_key_algorithm_fails() {
+        val exception: DomainError = assertThrows{
+            when_encrypt_message(anInvalidValue, aValidCipherTransformation)
         }
         assertEquals(exception.message, "Invalid algorithm")
-
     }
 
-    private fun when_encrypt_message(keyAlgorithm: String) {
+    @Test()
+    fun encrypt_message_with_invalid_cipher_transformation_fails() {
+        val exception: DomainError = assertThrows{
+            when_encrypt_message(aKeyAlgorithm, anInvalidValue)
+        }
+        assertEquals(exception.message, "Invalid transformation")
+    }
+
+
+
+    private fun when_encrypt_message(keyAlgorithm: String, cipherTransformation: String) {
         result =
             EncryptMessage.execute(
                 aMessage,
                 EncryptFixture.aPublicKey,
-                aCipherTransformation,
+                cipherTransformation,
                 keyAlgorithm)
     }
 
     private fun then_the_encrypted_data_is() {
         Assertions.assertEquals(
             aMessage,
-            EncryptUtils.decrypt(result, aPrivateKey, aCipherTransformation, aKeyAlgorithm)
+            EncryptUtils.decrypt(result, aPrivateKey, aValidCipherTransformation, aKeyAlgorithm)
         )
     }
 

@@ -1,7 +1,8 @@
 package action
 
 import net.veritran.encryption.domain.AlgorithmIdentifier
-import net.veritran.encryption.domain.KeyAlgorithms
+import net.veritran.encryption.domain.algorithm.CipherTransformations
+import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.infrastructure.EncryptUtils
 import org.jose4j.keys.AesKey
 import org.jose4j.lang.ByteUtil
@@ -11,14 +12,16 @@ import java.util.*
 
 object EncryptFixture {
     const val aMessage = "a value"
-    const val aCipherTransformation = "RSA/ECB/PKCS1Padding"
-    const val aCipherAlgorithm = "RSA"
-    const val anInvalidAlgorithm = "an invalid algorithm"
-    const val aTransformation = "RSA"
-    const val aHashAlgorithm = "SHA-256"
+    const val anInvalidValue = "an invalid value"
 
+    val aValidCipherTransformation = CipherTransformations.RSA_ECB_PKCS1PADDING.value
     val aKeyAlgorithm = KeyAlgorithms.RSA.value
     val anAlgorithmIdentifier = AlgorithmIdentifier.RSA_OAEP_256.value
+
+
+    const val aCipherAlgorithm = "RSA"
+    const val aTransformation = "RSA"
+    const val aHashAlgorithm = "SHA-256"
 
     const val anEncryptedMessage =
         "V/n5n2+hTtXQdewKVEbHA7fZp62NoHWTQP8g6UqUqiQw1D2n1girmHw9sl4tinGEVFLk0kdn+3SG8sMEcrLL03sQ5upBECarwBD6QEiBqkHaNNy639j5/iCXiIwHIaLShGFExdtKsNyBMas7zsscFQR1M4y1nS68NDjxecb18ZY="
