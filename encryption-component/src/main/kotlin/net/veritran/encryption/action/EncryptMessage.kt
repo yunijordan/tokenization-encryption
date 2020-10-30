@@ -1,5 +1,7 @@
 package net.veritran.encryption.action
 
+import net.veritran.encryption.domain.algorithm.KeyAlgorithms
+import net.veritran.encryption.domain.algorithm.KeyAlgorithms.Companion.validate
 import net.veritran.encryption.domain.error.InvalidAlgorithm
 import net.veritran.encryption.infrastructure.EncryptUtils
 
@@ -16,6 +18,6 @@ object EncryptMessage {
         throw InvalidAlgorithm("Invalid algorithm")
     }
 
-    private fun validateKeyAlgorithm(keyAlgorithm: String) = keyAlgorithm == "RSA"
+    private fun validateKeyAlgorithm(keyAlgorithm: String) = validate(keyAlgorithm)
 
 }
