@@ -7,7 +7,8 @@ import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPrivateKey
 import action.EncryptFixture.aCipherTransformation
 import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.anUnknownAlgorithm
+import action.EncryptFixture.anInvalidAlgorithm
+import net.veritran.encryption.domain.error.InvalidAlgorithm
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
@@ -27,10 +28,11 @@ class EncryptMessageTest {
 
     @Test()
     fun encrypt_message_with_unknown_key_algorithm_fails() {
-        val exception = assertThrows<Exception>("Should throw an exception") {
-            when_encrypt_message(anUnknownAlgorithm)
+        val exception: InvalidAlgorithm = assertThrows{
+            when_encrypt_message(anInvalidAlgorithm)
         }
-        assertEquals(exception.message, "Unknown algorithm")
+        assertEquals(exception.message, "Invalid algorithm")
+
     }
 
     private fun when_encrypt_message(keyAlgorithm: String) {

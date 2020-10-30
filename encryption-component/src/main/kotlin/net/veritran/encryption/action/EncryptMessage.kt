@@ -1,5 +1,6 @@
 package net.veritran.encryption.action
 
+import net.veritran.encryption.domain.error.InvalidAlgorithm
 import net.veritran.encryption.infrastructure.EncryptUtils
 
 object EncryptMessage {
@@ -10,9 +11,11 @@ object EncryptMessage {
         cipherTransformation: String,
         keyAlgorithm: String
     ): String {
-        if (keyAlgorithm == "RSA")
+        if (validateKeyAlgorithm(keyAlgorithm))
             return EncryptUtils.encrypt(message, publicKey, cipherTransformation, keyAlgorithm)
-        throw Exception("Unknown algorithm")
+        throw InvalidAlgorithm("Invalid algorithm")
     }
+
+    private fun validateKeyAlgorithm(keyAlgorithm: String) = keyAlgorithm == "RSA"
 
 }

@@ -1,6 +1,6 @@
 package net.veritran.encryption.action
 
-import net.veritran.encryption.infrastructure.AlgorithmIdentifier
+import net.veritran.encryption.domain.AlgorithmIdentifier
 import net.veritran.encryption.infrastructure.EncryptUtils
 import net.veritran.encryption.infrastructure.JweUtils
 

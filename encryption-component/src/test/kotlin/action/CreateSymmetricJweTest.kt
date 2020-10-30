@@ -5,7 +5,7 @@ import action.EncryptFixture.aSymmetricKey
 import action.EncryptFixture.symmetricKey
 import net.veritran.encryption.infrastructure.JweUtils.jwePayload
 import net.veritran.encryption.action.CreateSymmetricJWE
-import net.veritran.encryption.infrastructure.AlgorithmIdentifier
+import net.veritran.encryption.domain.AlgorithmIdentifier
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
