@@ -41,8 +41,6 @@ class EncryptMessageTest {
         assertEquals(exception.message, "Invalid transformation")
     }
 
-
-
     private fun when_encrypt_message(keyAlgorithm: String, cipherTransformation: String) {
         result =
             EncryptMessage.execute(

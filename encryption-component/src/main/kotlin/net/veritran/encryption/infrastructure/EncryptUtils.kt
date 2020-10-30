@@ -1,5 +1,7 @@
 package net.veritran.encryption.infrastructure
 
+import org.jose4j.keys.AesKey
+import org.jose4j.lang.ByteUtil
 import java.security.Key
 import java.security.KeyFactory
 import java.security.MessageDigest
@@ -52,6 +54,10 @@ object EncryptUtils {
         return keyFactory.generatePrivate(keySpec)
     }
 
+    fun generateAesKey(bytes: ByteArray): Key {
+        return AesKey(bytes)
+    }
+
     fun signMessage(
         message: String,
         privateKey: String,
@@ -69,18 +75,18 @@ object EncryptUtils {
     }
 
     fun verifySign(
-        encryptedMessageHash: ByteArray,
-        message: String,
-        publicKey: String,
-        algorithm: String,
-        transformation: String,
-        hashAlgorithm: String
+            encryptedMessageHash: ByteArray,
+            message: String,
+            publicKey: String,
+            keyAlgorithm: String,
+            transformation: String,
+            hashAlgorithm: String
     ): Boolean {
         val cipherHashedMessage = cipherMessage(
             transformation,
             encryptedMessageHash,
             Cipher.DECRYPT_MODE,
-            getPublicKey(publicKey, algorithm)
+            getPublicKey(publicKey, keyAlgorithm)
         )
         val hashedMessage = hashMessage(message, hashAlgorithm)
         return hashedMessage.contentEquals(cipherHashedMessage)

@@ -1,6 +1,7 @@
 package net.veritran.encryption.domain.algorithm
 
 enum class CipherTransformations(val value: String) {
+
     RSA_ECB_PKCS1PADDING("RSA/ECB/PKCS1Padding"),
     AES_CBC_NOPADDING("AES/CBC/NOPADDING"),
     AES_CBC_PKCS5PADDING("AES/CBC/PKCS5PADDING"),
@@ -16,7 +17,6 @@ enum class CipherTransformations(val value: String) {
     DESEDE_ECB_PKCS5PADDING("DESEDE/ECB/PKCS5PADDING"),
     RSA_ECB_OAEPWITHSHA_1ANDMGF1PADDING("RSA/ECB/OAEPWITHSHA-1ANDMGF1PADDING"),
     RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
-
 
     companion object {
         fun validate(value: String): Boolean {

@@ -1,9 +1,11 @@
 package action
 
 import action.EncryptFixture.aPrivateKey_2048
-import action.EncryptFixture.aCipherAlgorithm
+import action.EncryptFixture.aKeyAlgorithm
 import action.EncryptFixture.anEncryptedJwe
+
 import net.veritran.encryption.action.UnwrapJWE
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -22,6 +24,6 @@ class GetPayloadTest {
     }
 
     private fun when_an_asymmetric_decrypt_action_is_called() {
-        decryptedPayload = UnwrapJWE().execute(anEncryptedJwe, aPrivateKey_2048, aCipherAlgorithm)
+        decryptedPayload = UnwrapJWE().execute(anEncryptedJwe, aPrivateKey_2048, aKeyAlgorithm)
     }
 }

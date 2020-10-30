@@ -4,8 +4,9 @@ import action.EncryptFixture.aHashAlgorithm
 import action.EncryptFixture.aHashedMessage
 import action.EncryptFixture.aMessage
 import action.EncryptFixture.aPublicKey
-import action.EncryptFixture.aTransformation
-import action.EncryptFixture.aCipherAlgorithm
+import action.EncryptFixture.aKeyAlgorithm
+import action.EncryptFixture.aValidCipherTransformation
+
 import net.veritran.encryption.action.VerifySignature
 
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -23,7 +24,7 @@ class VerifySignatureTest {
     }
 
     private fun when_verify_sign_using_RSA() {
-        result = verifySignature.execute(aHashedMessage, aMessage, aPublicKey, aCipherAlgorithm, aTransformation, aHashAlgorithm)
+        result = verifySignature.execute(aHashedMessage, aMessage, aPublicKey, aKeyAlgorithm, aValidCipherTransformation, aHashAlgorithm)
     }
 
     private fun then_the_signed_data_is() {
