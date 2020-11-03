@@ -1,13 +1,13 @@
 package action
 
-import action.EncryptFixture.aHashAlgorithm
+import utils.EncryptFixture.aHashAlgorithm
 import net.veritran.encryption.infrastructure.EncryptUtils.verifySign
 
-import action.EncryptFixture.aMessage
-import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aPublicKey
-import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.aValidCipherTransformation
+import utils.EncryptFixture.aMessage
+import utils.EncryptFixture.aPrivateKey
+import utils.EncryptFixture.aPublicKey
+import utils.EncryptFixture.aKeyAlgorithm
+import utils.EncryptFixture.aValidCipherTransformation
 
 import net.veritran.encryption.action.SignMessage
 

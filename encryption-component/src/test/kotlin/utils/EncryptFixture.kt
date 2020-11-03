@@ -1,4 +1,4 @@
-package action
+package utils
 
 import net.veritran.encryption.domain.algorithm.AlgorithmIdentifiers
 import net.veritran.encryption.domain.algorithm.CipherTransformations

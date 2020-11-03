@@ -3,16 +3,17 @@ package action
 import net.veritran.encryption.action.EncryptMessage
 import net.veritran.encryption.infrastructure.EncryptUtils
 
-import action.EncryptFixture.aMessage
-import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aValidCipherTransformation
-import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.anInvalidValue
+import utils.EncryptFixture.aMessage
+import utils.EncryptFixture.aPrivateKey
+import utils.EncryptFixture.aValidCipherTransformation
+import utils.EncryptFixture.aKeyAlgorithm
+import utils.EncryptFixture.anInvalidValue
 import net.veritran.encryption.domain.error.DomainError
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
+import utils.EncryptFixture
 import kotlin.test.assertEquals
 
 class EncryptMessageTest {

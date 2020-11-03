@@ -1,14 +1,14 @@
 package action
 
-import action.EncryptFixture.aHashAlgorithm
-import action.EncryptFixture.aMessage
-import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.aPublicKey
-import action.EncryptFixture.aPublicKey_2048
-import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.aValidCipherTransformation
-import action.EncryptFixture.anAlgorithmIdentifier
-import action.EncryptFixture.jwePrivateKey
+import utils.EncryptFixture.aHashAlgorithm
+import utils.EncryptFixture.aMessage
+import utils.EncryptFixture.aPrivateKey
+import utils.EncryptFixture.aPublicKey
+import utils.EncryptFixture.aPublicKey_2048
+import utils.EncryptFixture.aKeyAlgorithm
+import utils.EncryptFixture.aValidCipherTransformation
+import utils.EncryptFixture.anAlgorithmIdentifier
+import utils.EncryptFixture.jwePrivateKey
 
 import net.veritran.encryption.infrastructure.JweUtils
 import net.veritran.encryption.infrastructure.EncryptUtils.signMessage

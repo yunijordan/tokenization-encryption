@@ -1,8 +1,8 @@
 package action
 
-import action.EncryptFixture.aMessage
-import action.EncryptFixture.aSymmetricKey
-import action.EncryptFixture.symmetricKey
+import utils.EncryptFixture.aMessage
+import utils.EncryptFixture.aSymmetricKey
+import utils.EncryptFixture.symmetricKey
 import net.veritran.encryption.infrastructure.JweUtils.jwePayload
 import net.veritran.encryption.action.CreateSymmetricJWE
 import net.veritran.encryption.domain.algorithm.AlgorithmIdentifiers

@@ -16,6 +16,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     implementation("org.bitbucket.b_c:jose4j:0.7.2")
+    implementation( "com.beust:klaxon:5.0.1")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }

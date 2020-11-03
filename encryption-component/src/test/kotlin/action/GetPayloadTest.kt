@@ -1,8 +1,8 @@
 package action
 
-import action.EncryptFixture.aPrivateKey_2048
-import action.EncryptFixture.aKeyAlgorithm
-import action.EncryptFixture.anEncryptedJwe
+import utils.EncryptFixture.aPrivateKey_2048
+import utils.EncryptFixture.aKeyAlgorithm
+import utils.EncryptFixture.anEncryptedJwe
 
 import net.veritran.encryption.action.UnwrapJWE
 

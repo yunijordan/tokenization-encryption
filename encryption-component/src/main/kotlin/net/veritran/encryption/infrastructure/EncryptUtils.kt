@@ -1,10 +1,11 @@
 package net.veritran.encryption.infrastructure
 
 import org.jose4j.keys.AesKey
-import org.jose4j.lang.ByteUtil
-import java.security.Key
-import java.security.KeyFactory
-import java.security.MessageDigest
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.security.*
+import java.security.spec.InvalidKeySpecException
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
@@ -49,9 +50,17 @@ object EncryptUtils {
     }
 
     fun getPrivateKey(key: String, keyAlgorithm: String): Key {
+       return getPrivateKey(convertToByteArryBase64(key), keyAlgorithm)
+    }
+
+    fun getPrivateKey(key: ByteArray, keyAlgorithm: String): Key {
         val keyFactory = KeyFactory.getInstance(keyAlgorithm)
-        val keySpec = PKCS8EncodedKeySpec(Base64.getDecoder().decode(key.toByteArray()))
+        val keySpec = PKCS8EncodedKeySpec(key)
         return keyFactory.generatePrivate(keySpec)
+    }
+
+    fun getPrivateKey(keyFilePath: String): Key {
+        return getPrivateKey(Files.readAllBytes(Paths.get(keyFilePath)),"RSA")
     }
 
     fun generateAesKey(bytes: ByteArray): Key {
@@ -75,12 +84,12 @@ object EncryptUtils {
     }
 
     fun verifySign(
-            encryptedMessageHash: ByteArray,
-            message: String,
-            publicKey: String,
-            keyAlgorithm: String,
-            transformation: String,
-            hashAlgorithm: String
+        encryptedMessageHash: ByteArray,
+        message: String,
+        publicKey: String,
+        keyAlgorithm: String,
+        transformation: String,
+        hashAlgorithm: String
     ): Boolean {
         val cipherHashedMessage = cipherMessage(
             transformation,
@@ -108,4 +117,7 @@ object EncryptUtils {
         return messageDigest.digest(message.toByteArray())
     }
 
+    private  fun convertToByteArryBase64(key:String):ByteArray {
+        return Base64.getDecoder().decode(key.toByteArray())
+    }
 }

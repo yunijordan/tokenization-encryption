@@ -1,10 +1,10 @@
 package action
 
-import action.EncryptFixture.aMessage
-import action.EncryptFixture.aPrivateKey
-import action.EncryptFixture.anEncryptedMessage
-import action.EncryptFixture.aValidCipherTransformation
-import action.EncryptFixture.aKeyAlgorithm
+import utils.EncryptFixture.aMessage
+import utils.EncryptFixture.aPrivateKey
+import utils.EncryptFixture.anEncryptedMessage
+import utils.EncryptFixture.aValidCipherTransformation
+import utils.EncryptFixture.aKeyAlgorithm
 import net.veritran.encryption.action.DecryptMessage
 
 import org.junit.jupiter.api.Assertions
