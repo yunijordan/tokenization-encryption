@@ -12,6 +12,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
+import javax.crypto.Cipher.SECRET_KEY
+import javax.crypto.Cipher.UNWRAP_MODE
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource
@@ -68,9 +70,30 @@ object EncryptUtils {
         return getPrivateKey(Files.readAllBytes(Paths.get(keyFilePath)), "RSA")
     }
 
-    fun getUnwrappedKey(privateTspKey: Key, encryptedAesKey: String, oaepHashingAlgorithm: String): Key {
-        val encryptedAesKeyBytes = StringUtils.decodeHexToBytes(encryptedAesKey)
-        return unwrapKey(privateTspKey, encryptedAesKeyBytes, oaepHashingAlgorithm)
+    fun unwrap(
+        privateTspKey: Key,
+        encryptedAesKeyBytes: ByteArray,
+        oaepHashingAlgorithm: String,
+        wrappedKeyAlgorithm: String = "AES"
+    ): Key {
+        return try {
+            val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
+            val asymmetricCipher =
+                "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
+
+            val oaepParameterSpec = OAEPParameterSpec(
+                mgf1ParameterSpec.digestAlgorithm,
+                "MGF1",
+                mgf1ParameterSpec,
+                PSource.PSpecified.DEFAULT
+            )
+
+            val cipher = Cipher.getInstance(asymmetricCipher)
+            cipher.init(UNWRAP_MODE, privateTspKey, oaepParameterSpec)
+            cipher.unwrap(encryptedAesKeyBytes, wrappedKeyAlgorithm, SECRET_KEY)
+        } catch (ex: Exception) {
+            throw RuntimeException()
+        }
     }
 
     fun decryptData(unwrappedKey: Key, initialVector: String, encryptedDataBytes: ByteArray): ByteArray {
@@ -143,26 +166,5 @@ object EncryptUtils {
         return messageDigest.digest(message.toByteArray())
     }
 
-    private fun unwrapKey(privateTspKey: Key, encryptedAesKeyBytes: ByteArray, oaepHashingAlgorithm: String): Key {
-        return try {
-            val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
-            val asymmetricCipher =
-                "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
-            val cipher = Cipher.getInstance(asymmetricCipher)
-            cipher.init(4, privateTspKey, getOaepParameterSpec(mgf1ParameterSpec))
-            cipher.unwrap(encryptedAesKeyBytes, "AES", 3)
-        } catch (ex: Exception) {
-            throw RuntimeException()
-        }
-    }
-
-    private fun getOaepParameterSpec(mgf1ParameterSpec: MGF1ParameterSpec): OAEPParameterSpec? {
-        return OAEPParameterSpec(
-            mgf1ParameterSpec.digestAlgorithm,
-            "MGF1",
-            mgf1ParameterSpec,
-            PSource.PSpecified.DEFAULT
-        )
-    }
 
 }
