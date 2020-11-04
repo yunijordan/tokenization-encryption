@@ -8,11 +8,11 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource.PSpecified
 
-class DecryptMdesMessage {
+class DecryptMdesPayload {
 
-    fun execute(encryptedData: String, encryptedAesKey: String, oaepHashingAlgorithm: String, initialVector: String, privateKey: Key): String {
-        val encryptedDataBytes = decodeEncryptedData(encryptedData)
-        val secretKey = getSecretKey(privateKey, encryptedAesKey, oaepHashingAlgorithm)
+    fun execute(encryptedData: String, encryptedAesKey: String, oaepHashingAlgorithm: String, initialVector: String, privateTspKey: Key): String {
+        val encryptedDataBytes = decodeHexToBytes(encryptedData)
+        val secretKey = getSecretKey(privateTspKey, encryptedAesKey, oaepHashingAlgorithm)
         val decryptedBytes = decryptData(secretKey, initialVector, encryptedDataBytes)
         return String(decryptedBytes, StandardCharsets.UTF_8)
     }
@@ -24,18 +24,17 @@ class DecryptMdesMessage {
         return cipher.doFinal(encryptedDataBytes)
     }
 
-    private fun getSecretKey(privateKey: Key, encryptedAesKey: String, oaepHashingAlgorithm: String): Key {
-        val encryptedAesKeyBytes = decodeValue(encryptedAesKey)
-        return unwrapKey(privateKey, encryptedAesKeyBytes, oaepHashingAlgorithm)
+    private fun getSecretKey(privateTspKey: Key, encryptedAesKey: String, oaepHashingAlgorithm: String): Key {
+        val encryptedAesKeyBytes = decodeHexToBytes(encryptedAesKey)
+        return unwrapKey(privateTspKey, encryptedAesKeyBytes, oaepHashingAlgorithm)
     }
 
-    private fun unwrapKey(privateKey: Key, encryptedAesKeyBytes: ByteArray, oaepHashingAlgorithm: String): Key {
+    private fun unwrapKey(privateTspKey: Key, encryptedAesKeyBytes: ByteArray, oaepHashingAlgorithm: String): Key {
         return try {
             val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
-            val key: Key = privateKey
             val asymmetricCipher = "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
             val cipher = Cipher.getInstance(asymmetricCipher)
-            cipher.init(4, key, getOaepParameterSpec(mgf1ParameterSpec))
+            cipher.init(4, privateTspKey, getOaepParameterSpec(mgf1ParameterSpec))
             cipher.unwrap(encryptedAesKeyBytes, "AES", 3)
         } catch (ex: Exception) {
             throw RuntimeException()
@@ -44,7 +43,7 @@ class DecryptMdesMessage {
 
     private fun generateIv(iv: String): IvParameterSpec? {
         try {
-            val ivByteArray = decodeValue(iv)
+            val ivByteArray = decodeHexToBytes(iv)
             return IvParameterSpec(ivByteArray)
         } catch (ex: Exception) {
             throw RuntimeException()
@@ -55,11 +54,7 @@ class DecryptMdesMessage {
         return OAEPParameterSpec(mgf1ParameterSpec.digestAlgorithm, "MGF1", mgf1ParameterSpec, PSpecified.DEFAULT)
     }
 
-    private fun decodeEncryptedData(encryptedData: String) : ByteArray {
-        return decodeValue(encryptedData)
-    }
-
-    private fun decodeValue(value: String): ByteArray {
+    private fun decodeHexToBytes(value: String): ByteArray {
             val length = value.length
             val bytes = ByteArray(length / 2)
             var i = 0
