@@ -1,15 +1,20 @@
 package net.veritran.encryption.infrastructure
 
+import net.veritran.encryption.infrastructure.StringUtils.decodeBase64ToBytes
 import org.jose4j.keys.AesKey
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.security.*
-import java.security.spec.InvalidKeySpecException
+import java.security.Key
+import java.security.KeyFactory
+import java.security.MessageDigest
+import java.security.spec.MGF1ParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.OAEPParameterSpec
+import javax.crypto.spec.PSource
 
 object EncryptUtils {
 
@@ -50,7 +55,7 @@ object EncryptUtils {
     }
 
     fun getPrivateKey(key: String, keyAlgorithm: String): Key {
-       return getPrivateKey(convertToByteArryBase64(key), keyAlgorithm)
+        return getPrivateKey(decodeBase64ToBytes(key), keyAlgorithm)
     }
 
     fun getPrivateKey(key: ByteArray, keyAlgorithm: String): Key {
@@ -60,7 +65,28 @@ object EncryptUtils {
     }
 
     fun getPrivateKey(keyFilePath: String): Key {
-        return getPrivateKey(Files.readAllBytes(Paths.get(keyFilePath)),"RSA")
+        return getPrivateKey(Files.readAllBytes(Paths.get(keyFilePath)), "RSA")
+    }
+
+    fun getUnwrappedKey(privateTspKey: Key, encryptedAesKey: String, oaepHashingAlgorithm: String): Key {
+        val encryptedAesKeyBytes = StringUtils.decodeHexToBytes(encryptedAesKey)
+        return unwrapKey(privateTspKey, encryptedAesKeyBytes, oaepHashingAlgorithm)
+    }
+
+    fun decryptData(unwrappedKey: Key, initialVector: String, encryptedDataBytes: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        val iv = generateIv(initialVector)
+        cipher.init(2, unwrappedKey, iv)
+        return cipher.doFinal(encryptedDataBytes)
+    }
+
+    private fun generateIv(iv: String): IvParameterSpec? {
+        try {
+            val ivByteArray = StringUtils.decodeHexToBytes(iv)
+            return IvParameterSpec(ivByteArray)
+        } catch (ex: Exception) {
+            throw RuntimeException()
+        }
     }
 
     fun generateAesKey(bytes: ByteArray): Key {
@@ -117,7 +143,26 @@ object EncryptUtils {
         return messageDigest.digest(message.toByteArray())
     }
 
-    private  fun convertToByteArryBase64(key:String):ByteArray {
-        return Base64.getDecoder().decode(key.toByteArray())
+    private fun unwrapKey(privateTspKey: Key, encryptedAesKeyBytes: ByteArray, oaepHashingAlgorithm: String): Key {
+        return try {
+            val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
+            val asymmetricCipher =
+                "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
+            val cipher = Cipher.getInstance(asymmetricCipher)
+            cipher.init(4, privateTspKey, getOaepParameterSpec(mgf1ParameterSpec))
+            cipher.unwrap(encryptedAesKeyBytes, "AES", 3)
+        } catch (ex: Exception) {
+            throw RuntimeException()
+        }
     }
+
+    private fun getOaepParameterSpec(mgf1ParameterSpec: MGF1ParameterSpec): OAEPParameterSpec? {
+        return OAEPParameterSpec(
+            mgf1ParameterSpec.digestAlgorithm,
+            "MGF1",
+            mgf1ParameterSpec,
+            PSource.PSpecified.DEFAULT
+        )
+    }
+
 }
