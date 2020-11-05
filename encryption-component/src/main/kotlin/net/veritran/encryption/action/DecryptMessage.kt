@@ -2,7 +2,7 @@ package net.veritran.encryption.action
 
 import net.veritran.encryption.infrastructure.EncryptUtils
 import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey
-import net.veritran.encryption.infrastructure.StringUtils.decodeBase64ToBytes
+import net.veritran.encryption.infrastructure.StringUtils.decode
 
 class DecryptMessage {
 
@@ -12,7 +12,7 @@ class DecryptMessage {
         cipherTransformation: String,
         keyAlgorithm: String
     ): String {
-        val messageBytes = decodeBase64ToBytes(message)
+        val messageBytes = decode(message)
         val privateKey = getPrivateKey(privateKeyStr, keyAlgorithm)
         return EncryptUtils.decrypt(messageBytes, privateKey , cipherTransformation)
     }

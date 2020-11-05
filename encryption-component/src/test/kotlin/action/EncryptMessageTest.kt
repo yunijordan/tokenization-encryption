@@ -10,7 +10,7 @@ import utils.EncryptFixture.aKeyAlgorithm
 import utils.EncryptFixture.anInvalidValue
 import net.veritran.encryption.domain.error.DomainError
 import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey
-import net.veritran.encryption.infrastructure.StringUtils.decodeBase64ToBytes
+import net.veritran.encryption.infrastructure.StringUtils.decode
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
@@ -57,7 +57,7 @@ class EncryptMessageTest {
         Assertions.assertEquals(
             aMessage,
             EncryptUtils.decrypt(
-                    decodeBase64ToBytes(result),
+                    decode(result),
                     getPrivateKey(aPrivateKey, aKeyAlgorithm),
                     aValidCipherTransformation
             )

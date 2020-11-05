@@ -1,7 +1,5 @@
 package utils
 
-import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
 import net.veritran.encryption.domain.algorithm.AlgorithmIdentifiers
 import net.veritran.encryption.domain.algorithm.CipherTransformations
 import net.veritran.encryption.domain.algorithm.HashAlgorithms
@@ -13,7 +11,6 @@ import org.jose4j.lang.ByteUtil
 
 import java.security.Key
 import java.util.*
-
 
 object EncryptFixture {
 
@@ -49,8 +46,5 @@ object EncryptFixture {
 
     const val anEncryptedJwe =
         "eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.mJd04IZX12ygLvft5VMeQCHQ2kRJs9XFg1lCmdmwmvKRLhPWiv0gMHFwFF2NV_DjoEYXMZtDsrcy5J48VqlIWCiGRD5uNT8OX5jn_KUU3Znfr3H6sMovDUu7kQF4OPhdS-a-QyxjK6enkm0n_AA-lREqTdpuMEz78TXhbpfcfroRwMY6KjCWWMKXMxYGTt1f2bHQoUdrVISJfczgMPbxdZb20kdYRfkaQlZwwNfvJHsmZ6mQA3Na0emGMxvpYAVEeZ3s_xszv3ag4aVar0mDJW5cSucSaLgFLzaVSjiBdNmrU2AFA1sHlcPsgD4QByCtJbe-vDZ4D2SQ-OkaNfBdSw.ywpGLAzm-aM7eFzgVtPdbA.-LXw_5ZqKavkhY6CKg-LM2gGdhzp1chEnc0prOsn8S-DCVROr6Uy3pi89riQyPcM.ZOVYWNpKU1-_ra33f0FmZQ"
-
-    val encryptedBody = Parser().parse("src/test/resources/mdes/encryptedPayload.json") as JsonObject
-    val decryptedBody = Parser().parse("src/test/resources/mdes/decryptedPayload.json") as JsonObject
 
 }

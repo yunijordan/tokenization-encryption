@@ -1,53 +1,56 @@
 package action
 
-import net.veritran.encryption.action.DecryptMdesPayload
+import net.veritran.encryption.action.DecryptMDESPayload
 import net.veritran.encryption.infrastructure.EncryptUtils
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import utils.EncryptFixture.decryptedBody
 
-import utils.EncryptFixture.encryptedBody
+import utils.MDESFixture.aCipherTransformation
+import utils.MDESFixture.decryptedBody
+import utils.MDESFixture.encryptedBody
+import utils.MDESFixture.keyFilePath
 
 import java.security.Key
 
-class DecryptMdesPayloadTest {
+class DecryptMDESPayloadTest {
 
-    private val decryptMdesPayload = DecryptMdesPayload()
+    private val decryptMDESPayload = DecryptMDESPayload()
     private lateinit var expectedDecryptedString: String
     private var encryptedData: String
-    private var encryptedAesKey: String
+    private var encryptedKey: String
     private var oaepHashingAlgorithm: String
     private var initialVector: String
     private var privateTspKey: Key
 
     init {
         encryptedData = encryptedBody["encryptedData"] as String
-        encryptedAesKey = encryptedBody["encryptedKey"] as String
+        encryptedKey = encryptedBody["encryptedKey"] as String
         oaepHashingAlgorithm = encryptedBody["oaepHashingAlgorithm"] as String
         initialVector = encryptedBody["iv"] as String
-        privateTspKey =
-            EncryptUtils.getPrivateKey("src/test/resources/digital-enablement-sandbox-decryption-key.key")
+        privateTspKey = EncryptUtils.getPrivateKey(keyFilePath)
     }
     
     @Test
-    fun decrypt_mdes_payload_successfully() {
-        when_decrypt_a_mdes_encrypted_payload()
-        then_we_have_a_decrypted_body()
+    fun decrypt_MDES_payload_successfully() {
+        when_decrypt_a_MDES_encrypted_payload()
+        then_returns_a_MDES_decrypted_payload()
     }
 
-    private fun when_decrypt_a_mdes_encrypted_payload() {
+    private fun when_decrypt_a_MDES_encrypted_payload() {
         expectedDecryptedString =
-            decryptMdesPayload.execute(
+            decryptMDESPayload.execute(
                 encryptedData,
-                encryptedAesKey,
+                encryptedKey,
                 oaepHashingAlgorithm,
                 initialVector,
+                aCipherTransformation,
                 privateTspKey
             )
     }
 
-    private fun then_we_have_a_decrypted_body() {
+    private fun then_returns_a_MDES_decrypted_payload() {
         Assertions.assertTrue(expectedDecryptedString.contains(decryptedBody["paymentAccountReference"] as String))
     }
+
 }
