@@ -1,9 +1,12 @@
 package net.veritran.encryption.action
 
-import net.veritran.encryption.infrastructure.EncryptUtils.decryptData
+import net.veritran.encryption.domain.algorithm.CipherTransformations
+
+import net.veritran.encryption.infrastructure.EncryptUtils.decrypt
+import net.veritran.encryption.infrastructure.EncryptUtils.generateIv
 import net.veritran.encryption.infrastructure.EncryptUtils.unwrap
 import net.veritran.encryption.infrastructure.StringUtils.decodeHexToBytes
-import java.nio.charset.StandardCharsets
+
 import java.security.Key
 
 class DecryptMdesPayload {
@@ -18,7 +21,8 @@ class DecryptMdesPayload {
         val encryptedDataBytes = decodeHexToBytes(encryptedData)
         val encryptedAesKeyBytes = decodeHexToBytes(encryptedAesKey)
         val unwrappedKey = unwrap(privateTspKey, encryptedAesKeyBytes, oaepHashingAlgorithm)
-        val decryptedBytes = decryptData(unwrappedKey, initialVector, encryptedDataBytes)
-        return String(decryptedBytes, StandardCharsets.UTF_8)
+        val initialVectorParam = generateIv(initialVector)
+        return decrypt(encryptedDataBytes, unwrappedKey, CipherTransformations.AES_CBC_PKCS5PADDING.value, initialVectorParam)
     }
+
 }

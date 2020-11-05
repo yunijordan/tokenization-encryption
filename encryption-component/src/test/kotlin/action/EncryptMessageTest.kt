@@ -9,6 +9,8 @@ import utils.EncryptFixture.aValidCipherTransformation
 import utils.EncryptFixture.aKeyAlgorithm
 import utils.EncryptFixture.anInvalidValue
 import net.veritran.encryption.domain.error.DomainError
+import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey
+import net.veritran.encryption.infrastructure.StringUtils.decodeBase64ToBytes
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
@@ -26,7 +28,7 @@ class EncryptMessageTest {
         then_the_encrypted_data_is()
     }
 
-    @Test()
+    @Test
     fun encrypt_message_with_invalid_key_algorithm_fails() {
         val exception: DomainError = assertThrows{
             when_encrypt_message(anInvalidValue, aValidCipherTransformation)
@@ -34,7 +36,7 @@ class EncryptMessageTest {
         assertEquals(exception.message, "Invalid algorithm")
     }
 
-    @Test()
+    @Test
     fun encrypt_message_with_invalid_cipher_transformation_fails() {
         val exception: DomainError = assertThrows{
             when_encrypt_message(aKeyAlgorithm, anInvalidValue)
@@ -54,7 +56,11 @@ class EncryptMessageTest {
     private fun then_the_encrypted_data_is() {
         Assertions.assertEquals(
             aMessage,
-            EncryptUtils.decrypt(result, aPrivateKey, aValidCipherTransformation, aKeyAlgorithm)
+            EncryptUtils.decrypt(
+                    decodeBase64ToBytes(result),
+                    getPrivateKey(aPrivateKey, aKeyAlgorithm),
+                    aValidCipherTransformation
+            )
         )
     }
 

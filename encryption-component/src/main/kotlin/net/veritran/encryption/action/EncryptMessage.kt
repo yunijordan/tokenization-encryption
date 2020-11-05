@@ -4,6 +4,7 @@ import net.veritran.encryption.domain.algorithm.CipherTransformations
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.domain.error.DomainError
 import net.veritran.encryption.infrastructure.EncryptUtils
+
 object EncryptMessage {
 
     fun execute(

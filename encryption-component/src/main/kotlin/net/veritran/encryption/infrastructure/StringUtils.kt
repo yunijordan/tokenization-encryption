@@ -12,7 +12,7 @@ object StringUtils {
         return bytes
     }
 
-      fun decodeBase64ToBytes(key:String):ByteArray {
+      fun decodeBase64ToBytes(key:String): ByteArray {
         return Base64.getDecoder().decode(key.toByteArray())
     }
 }
