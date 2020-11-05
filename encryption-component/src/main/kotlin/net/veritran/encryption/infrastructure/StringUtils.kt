@@ -6,8 +6,8 @@ import java.util.*
 object StringUtils {
 
     fun decode(
-            value: String,
-            encoding: EncodingValues? = EncodingValues.BASE64
+        value: String,
+        encoding: EncodingValues? = EncodingValues.BASE64
     ): ByteArray{
         return if(encoding == EncodingValues.HEX)
                     decodeHex(value)

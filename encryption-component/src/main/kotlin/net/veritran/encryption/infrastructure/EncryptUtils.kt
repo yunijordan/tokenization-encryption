@@ -1,5 +1,6 @@
 package net.veritran.encryption.infrastructure
 
+import net.veritran.encryption.domain.algorithm.CipherTransformations.RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.infrastructure.StringUtils.decode
 
@@ -19,8 +20,6 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 import javax.crypto.Cipher
-import javax.crypto.Cipher.SECRET_KEY
-import javax.crypto.Cipher.UNWRAP_MODE
 
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.OAEPParameterSpec
@@ -29,54 +28,54 @@ import javax.crypto.spec.PSource
 object EncryptUtils {
 
     fun encrypt(
-            message: String,
-            publicKey: String,
-            cipherTransformation: String,
-            keyAlgorithm: String
+        message: String,
+        publicKey: String,
+        cipherTransformation: String,
+        keyAlgorithm: String
     ): String {
         val encryptedBytes = cipherMessage(
-                cipherTransformation,
-                message.toByteArray(),
-                Cipher.ENCRYPT_MODE,
-                getPublicKey(publicKey, keyAlgorithm)
+            cipherTransformation,
+            message.toByteArray(),
+            Cipher.ENCRYPT_MODE,
+            getPublicKey(publicKey, keyAlgorithm)
         )
         return Base64.getEncoder().encodeToString(encryptedBytes)
     }
 
     fun decrypt(
-            messageBytes: ByteArray,
-            privateKey: Key,
-            cipherTransformation: String,
-            algorithmParameterSpec: AlgorithmParameterSpec? = null
+        messageBytes: ByteArray,
+        privateKey: Key,
+        cipherTransformation: String,
+        algorithmParameterSpec: AlgorithmParameterSpec? = null
     ): String {
         val decryptedBytes = cipherMessage(
-                cipherTransformation,
-                messageBytes,
-                Cipher.DECRYPT_MODE,
-                privateKey,
-                algorithmParameterSpec
+            cipherTransformation,
+            messageBytes,
+            Cipher.DECRYPT_MODE,
+            privateKey,
+            algorithmParameterSpec
         )
         return String(decryptedBytes)
     }
 
     fun unwrap(
-            privateTspKey: Key,
-            keyBytes: ByteArray,
-            oaepHashingAlgorithm: String,
-            wrappedKeyAlgorithm: String = KeyAlgorithms.AES.value
+        wrappedMessage: ByteArray,
+        privateTspKey: Key,
+        oaepHashingAlgorithm: String,
+        wrappedAlgorithm: String = KeyAlgorithms.AES.value
     ): Key {
         val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
         val cipherTransformation =
-                "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
+            RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING.value.replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
         val oaepParameterSpec = OAEPParameterSpec(
-                mgf1ParameterSpec.digestAlgorithm,
-                "MGF1",
-                mgf1ParameterSpec,
-                PSource.PSpecified.DEFAULT
+            mgf1ParameterSpec.digestAlgorithm,
+            "MGF1",
+            mgf1ParameterSpec,
+            PSource.PSpecified.DEFAULT
         )
         val cipher = Cipher.getInstance(cipherTransformation)
-        cipher.init(UNWRAP_MODE, privateTspKey, oaepParameterSpec)
-        return cipher.unwrap(keyBytes, wrappedKeyAlgorithm, SECRET_KEY)
+        cipher.init(Cipher.UNWRAP_MODE, privateTspKey, oaepParameterSpec)
+        return cipher.unwrap(wrappedMessage, wrappedAlgorithm, Cipher.SECRET_KEY)
     }
 
     fun getPublicKey(key: String, keyAlgorithm: String): Key {
@@ -99,34 +98,34 @@ object EncryptUtils {
     }
 
     fun signMessage(
-            message: String,
-            privateKey: String,
-            keyAlgorithm: String,
-            cipherTransformation: String,
-            hashAlgorithm: String
+        message: String,
+        privateKey: String,
+        keyAlgorithm: String,
+        cipherTransformation: String,
+        hashAlgorithm: String
     ): ByteArray {
         val hashedMessage = hashMessage(message, hashAlgorithm)
         return cipherMessage(
-                cipherTransformation,
-                hashedMessage,
-                Cipher.ENCRYPT_MODE,
-                getPrivateKey(privateKey, keyAlgorithm)
+            cipherTransformation,
+            hashedMessage,
+            Cipher.ENCRYPT_MODE,
+            getPrivateKey(privateKey, keyAlgorithm)
         )
     }
 
     fun verifySign(
-            encryptedMessageHash: ByteArray,
-            message: String,
-            publicKey: String,
-            keyAlgorithm: String,
-            transformation: String,
-            hashAlgorithm: String
+        encryptedMessageHash: ByteArray,
+        message: String,
+        publicKey: String,
+        keyAlgorithm: String,
+        transformation: String,
+        hashAlgorithm: String
     ): Boolean {
         val cipherHashedMessage = cipherMessage(
-                transformation,
-                encryptedMessageHash,
-                Cipher.DECRYPT_MODE,
-                getPublicKey(publicKey, keyAlgorithm)
+            transformation,
+            encryptedMessageHash,
+            Cipher.DECRYPT_MODE,
+            getPublicKey(publicKey, keyAlgorithm)
         )
         val hashedMessage = hashMessage(message, hashAlgorithm)
         return hashedMessage.contentEquals(cipherHashedMessage)
@@ -138,11 +137,11 @@ object EncryptUtils {
     }
 
     private fun cipherMessage(
-            cipherTransformation: String,
-            messageBytes: ByteArray,
-            cipherMode: Int,
-            key: Key,
-            algorithmParameterSpec: AlgorithmParameterSpec? = null
+        cipherTransformation: String,
+        messageBytes: ByteArray,
+        cipherMode: Int,
+        key: Key,
+        algorithmParameterSpec: AlgorithmParameterSpec? = null
     ): ByteArray {
         val cipher = Cipher.getInstance(cipherTransformation)
         cipher.init(cipherMode, key, algorithmParameterSpec)

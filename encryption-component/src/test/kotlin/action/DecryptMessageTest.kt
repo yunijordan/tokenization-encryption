@@ -26,7 +26,8 @@ class DecryptMessageTest {
             anEncryptedMessage,
             aPrivateKey,
             aValidCipherTransformation,
-            aKeyAlgorithm)
+            aKeyAlgorithm
+        )
     }
 
     private fun then_the_decrypted_data_is() {

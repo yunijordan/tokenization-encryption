@@ -1,8 +1,8 @@
 package action
 
-import utils.EncryptFixture.aHashAlgorithm
 import net.veritran.encryption.infrastructure.EncryptUtils.verifySign
 
+import utils.EncryptFixture.aHashAlgorithm
 import utils.EncryptFixture.aMessage
 import utils.EncryptFixture.aPrivateKey
 import utils.EncryptFixture.aPublicKey

@@ -44,8 +44,11 @@ class CreateJweTest {
     }
 
     private fun then_we_have_an_asymmetric_encrypted_payload() {
-        val signedPayload: String =
-            JweUtils.jwePayload(jwePrivateKey, encryptedMessage, anAlgorithmIdentifier)
+        val signedPayload: String = JweUtils.jwePayload(
+                jwePrivateKey,
+                encryptedMessage,
+                anAlgorithmIdentifier
+        )
         assertEquals(
             signedPayload,
             Base64.getEncoder()
@@ -54,7 +57,8 @@ class CreateJweTest {
                     aPrivateKey,
                     aKeyAlgorithm,
                     aValidCipherTransformation,
-                    aHashAlgorithm))
+                    aHashAlgorithm)
+                )
         )
         assertTrue(
             verifySign(

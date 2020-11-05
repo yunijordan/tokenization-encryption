@@ -24,7 +24,14 @@ class VerifySignatureTest {
     }
 
     private fun when_verify_sign_using_RSA() {
-        result = verifySignature.execute(aHashedMessage, aMessage, aPublicKey, aKeyAlgorithm, aValidCipherTransformation, aHashAlgorithm)
+        result = verifySignature.execute(
+            aHashedMessage,
+            aMessage,
+            aPublicKey,
+            aKeyAlgorithm,
+            aValidCipherTransformation,
+            aHashAlgorithm
+        )
     }
 
     private fun then_the_signed_data_is() {

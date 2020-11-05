@@ -14,15 +14,14 @@ class DecryptMDESPayload {
         encryptedData: String,
         encryptedKey: String,
         oaepHashingAlgorithm: String,
-        initialVector: String,
+        initializationVector: String,
         cipherTransformation: String,
         privateTspKey: Key
     ): String {
-        val decodedPayload = create(encryptedData, encryptedKey, initialVector)
-        val privateKey = unwrap(privateTspKey, decodedPayload.keyBytes, oaepHashingAlgorithm)
-        val iv = generateIv(decodedPayload.ivBytes)
-        return decrypt(decodedPayload.messageBytes, privateKey, cipherTransformation, iv)
+        val decodedPayload = create(encryptedData, encryptedKey, initializationVector)
+        val privateKey = unwrap(decodedPayload.wrappedKey(), privateTspKey, oaepHashingAlgorithm)
+        val iv = generateIv(decodedPayload.iv())
+        return decrypt(decodedPayload.encryptedData(), privateKey, cipherTransformation, iv)
     }
-
 
 }

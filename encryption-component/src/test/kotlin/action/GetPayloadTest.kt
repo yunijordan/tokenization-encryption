@@ -19,11 +19,11 @@ class GetPayloadTest {
         then_we_have_a_decrypted_payload()
     }
 
-    private fun then_we_have_a_decrypted_payload() {
-        Assertions.assertTrue(decryptedPayload == expectedDecryptedPayload)
-    }
-
     private fun when_an_asymmetric_decrypt_action_is_called() {
         decryptedPayload = UnwrapJWE().execute(anEncryptedJwe, aPrivateKey_2048, aKeyAlgorithm)
+    }
+
+    private fun then_we_have_a_decrypted_payload() {
+        Assertions.assertTrue(decryptedPayload == expectedDecryptedPayload)
     }
 }

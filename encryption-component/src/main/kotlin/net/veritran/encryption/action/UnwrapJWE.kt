@@ -6,9 +6,9 @@ import net.veritran.encryption.infrastructure.JweUtils
 
 class UnwrapJWE {
     fun execute(
-            encryptedPayload: String,
-            aPrivateKey: String,
-            keyAlgorithm: String
+        encryptedPayload: String,
+        aPrivateKey: String,
+        keyAlgorithm: String
     ): String {
         return JweUtils.jwePayload(
             EncryptUtils.getPrivateKey(aPrivateKey, keyAlgorithm),
