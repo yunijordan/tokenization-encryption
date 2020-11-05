@@ -17,18 +17,18 @@ class DecryptMDESPayloadTest {
 
     private val decryptMDESPayload = DecryptMDESPayload()
     private lateinit var expectedDecryptedString: String
-    private var encryptedData: String
-    private var encryptedKey: String
-    private var oaepHashingAlgorithm: String
-    private var initialVector: String
-    private var privateTspKey: Key
+    private var anEncryptedData: String
+    private var anEncryptedKey: String
+    private var aHashingAlgorithm: String
+    private var anInitialVector: String
+    private var aPrivateTspKey: Key
 
     init {
-        encryptedData = encryptedBody["encryptedData"] as String
-        encryptedKey = encryptedBody["encryptedKey"] as String
-        oaepHashingAlgorithm = encryptedBody["oaepHashingAlgorithm"] as String
-        initialVector = encryptedBody["iv"] as String
-        privateTspKey = EncryptUtils.getPrivateKey(keyFilePath)
+        anEncryptedData = encryptedBody["encryptedData"] as String
+        anEncryptedKey = encryptedBody["encryptedKey"] as String
+        aHashingAlgorithm = encryptedBody["oaepHashingAlgorithm"] as String
+        anInitialVector = encryptedBody["iv"] as String
+        aPrivateTspKey = EncryptUtils.getPrivateKey(keyFilePath)
     }
     
     @Test
@@ -38,19 +38,20 @@ class DecryptMDESPayloadTest {
     }
 
     private fun when_decrypt_a_MDES_encrypted_payload() {
-        expectedDecryptedString =
-            decryptMDESPayload.execute(
-                encryptedData,
-                encryptedKey,
-                oaepHashingAlgorithm,
-                initialVector,
+        expectedDecryptedString = decryptMDESPayload.execute(
+                anEncryptedData,
+                anEncryptedKey,
+                aHashingAlgorithm,
+                anInitialVector,
                 aCipherTransformation,
-                privateTspKey
+                aPrivateTspKey
             )
     }
 
     private fun then_returns_a_MDES_decrypted_payload() {
-        Assertions.assertTrue(expectedDecryptedString.contains(decryptedBody["paymentAccountReference"] as String))
+        Assertions.assertTrue(
+                expectedDecryptedString.contains(decryptedBody["paymentAccountReference"] as String)
+        )
     }
 
 }

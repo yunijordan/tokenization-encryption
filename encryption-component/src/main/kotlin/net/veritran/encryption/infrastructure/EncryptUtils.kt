@@ -28,7 +28,12 @@ import javax.crypto.spec.PSource
 
 object EncryptUtils {
 
-    fun encrypt(message: String, publicKey: String, cipherTransformation: String, keyAlgorithm: String): String {
+    fun encrypt(
+            message: String,
+            publicKey: String,
+            cipherTransformation: String,
+            keyAlgorithm: String
+    ): String {
         val encryptedBytes = cipherMessage(
                 cipherTransformation,
                 message.toByteArray(),
@@ -42,9 +47,15 @@ object EncryptUtils {
             messageBytes: ByteArray,
             privateKey: Key,
             cipherTransformation: String,
-            params: AlgorithmParameterSpec? = null
+            algorithmParameterSpec: AlgorithmParameterSpec? = null
     ): String {
-        val decryptedBytes = cipherMessage(cipherTransformation, messageBytes, Cipher.DECRYPT_MODE, privateKey, params)
+        val decryptedBytes = cipherMessage(
+                cipherTransformation,
+                messageBytes,
+                Cipher.DECRYPT_MODE,
+                privateKey,
+                algorithmParameterSpec
+        )
         return String(decryptedBytes)
     }
 
@@ -52,10 +63,10 @@ object EncryptUtils {
             privateTspKey: Key,
             keyBytes: ByteArray,
             oaepHashingAlgorithm: String,
-            wrappedKeyAlgorithm: String = "AES"
+            wrappedKeyAlgorithm: String = KeyAlgorithms.AES.value
     ): Key {
         val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
-        val asymmetricCipher =
+        val cipherTransformation =
                 "RSA/ECB/OAEPWith{ALG}AndMGF1Padding".replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
         val oaepParameterSpec = OAEPParameterSpec(
                 mgf1ParameterSpec.digestAlgorithm,
@@ -63,7 +74,7 @@ object EncryptUtils {
                 mgf1ParameterSpec,
                 PSource.PSpecified.DEFAULT
         )
-        val cipher = Cipher.getInstance(asymmetricCipher)
+        val cipher = Cipher.getInstance(cipherTransformation)
         cipher.init(UNWRAP_MODE, privateTspKey, oaepParameterSpec)
         return cipher.unwrap(keyBytes, wrappedKeyAlgorithm, SECRET_KEY)
     }
@@ -131,10 +142,10 @@ object EncryptUtils {
             messageBytes: ByteArray,
             cipherMode: Int,
             key: Key,
-            params: AlgorithmParameterSpec? = null
+            algorithmParameterSpec: AlgorithmParameterSpec? = null
     ): ByteArray {
         val cipher = Cipher.getInstance(cipherTransformation)
-        cipher.init(cipherMode, key, params)
+        cipher.init(cipherMode, key, algorithmParameterSpec)
         return cipher.doFinal(messageBytes)
     }
 
