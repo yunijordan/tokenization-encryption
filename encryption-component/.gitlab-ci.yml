@@ -34,6 +34,8 @@ test:
 deploy:
   stage: deploy
   when: manual
+  tags:
+    - nexus-publishing
   script:
     - export NEXUS_PASSWORD=$NEXUS_PASSWORD
     - export NEXUS_USER=$NEXUS_USER
