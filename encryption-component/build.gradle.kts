@@ -2,8 +2,6 @@ import org.gradle.jvm.tasks.Jar
 
 version = "1.0.0"
 val nexusRepo = "https://nexus-ar.veritran.net/repository/tokenization/"
-val nexusUser:String by project
-val nexusPassword:String by project
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
@@ -26,8 +24,8 @@ publishing {
         maven {
             url = uri(nexusRepo)
             credentials {
-                username = nexusUser
-                password = nexusPassword
+                username = System.getenv("NEXUS_USER")
+                password = System.getenv("NEXUS_PASSWORD")
             }
         }
     }
