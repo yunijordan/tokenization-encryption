@@ -10,13 +10,10 @@ variables:
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
-  - echo $NEXUS_USER
-  - echo $NEXUS_PASSWORD
   - cd encryption-component
 
 build:
   stage: build
-  when: manual
   script: ./gradlew clean build
   cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -38,6 +35,8 @@ deploy:
   stage: deploy
   when: manual
   script:
+    - export NEXUS_USER=$NEXUS_USER
+    - export NEXUS_PASSWORD=$NEXUS_PASSWORD
     - './gradlew publish'
   only:
     - master
