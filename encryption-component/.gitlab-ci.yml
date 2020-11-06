@@ -14,7 +14,7 @@ before_script:
 
 build:
   stage: build
-  script: ./gradlew clean build
+  script: ./gradlew clean build -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
@@ -23,7 +23,7 @@ build:
       - .gradle
 test:
   stage: test
-  script: ./gradlew check
+  script: ./gradlew check -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -37,6 +37,6 @@ deploy:
   tags:
     - nexus-publishing
   script:
-    - './gradlew publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD'
+    - ./gradlew publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
   only:
     - master
