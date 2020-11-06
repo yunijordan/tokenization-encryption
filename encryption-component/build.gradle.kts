@@ -2,6 +2,8 @@ import org.gradle.jvm.tasks.Jar
 
 version = "1.0.0"
 val nexusRepo = "https://nexus-ar.veritran.net/repository/tokenization/"
+val nexusUser:String by project
+val nexusPassword:String by project
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
@@ -24,8 +26,8 @@ publishing {
         maven {
             url = uri(nexusRepo)
             credentials {
-                username = "xxxxx"
-                password = "xxxxx"
+                username = nexusUser
+                password = nexusPassword
             }
         }
     }
@@ -34,9 +36,8 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.veritran.tokenization"
             artifactId = "encryption-component"
-            version = "0.0.1"
             from(components["java"])
-
+            artifact("encryption-component-fat-$version.jar")
         }
     }
 }
