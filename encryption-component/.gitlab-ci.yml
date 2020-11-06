@@ -35,8 +35,8 @@ deploy:
   stage: deploy
   when: manual
   script:
-    - export NEXUS_USER=$NEXUS_USER
     - export NEXUS_PASSWORD=$NEXUS_PASSWORD
+    - export NEXUS_USER=$NEXUS_USER
     - './gradlew publish'
   only:
     - master
