@@ -12,18 +12,30 @@ before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - cd encryption-component
 
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - build
+    - .gradle
+    - encryption-component/build/*
+    - encryption-component/gradle/*
+  policy: pull
+
+
 build:
   stage: build
-  script: ./gradlew clean build -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
+  script: ./gradlew clean build -PnexusUser=xxx -PnexusPassword=xxx
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
     paths:
       - build
       - .gradle
+      - encryption-component/build/*
+      - encryption-component/gradle/*
 test:
   stage: test
-  script: ./gradlew check -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
+  script: ./gradlew check -PnexusUser=xxx -PnexusPassword=xxx
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -36,7 +48,17 @@ deploy:
   when: manual
   tags:
     - nexus-publishing
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - build
+      - .gradle
+      - encryption-component/build/*
+      - encryption-component/gradle/*
+    policy: push
   script:
     - ./gradlew publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
+  dependencies:
+    - build
   only:
     - master
