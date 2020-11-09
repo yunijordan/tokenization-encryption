@@ -28,7 +28,5 @@ Use one of these actions ( wip: in the future you must use only the Provider cla
 ## Upload new verdion into nexus 
 ```bash
   cd encryption-component
-  export NEXUS_USER=userxxx
-  export NEXUS_PASSWORD=pswxx
- ./gradlew publish
+ ./gradlew publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
 ```
