@@ -57,7 +57,7 @@ deploy:
       - encryption-component/gradle/*
     policy: push
   script:
-    - ./gradlew publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
+    - ./gradlew clean build publish -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD
   dependencies:
     - build
   only:
