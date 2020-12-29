@@ -2,8 +2,8 @@ import org.gradle.jvm.tasks.Jar
 
 version = "1.0.0"
 val nexusRepo = "https://nexus-ar.veritran.net/repository/tokenization/"
-val nexusUser:String by project
-val nexusPassword:String by project
+val nexusUser:String = ""
+val nexusPassword:String = ""
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.10"

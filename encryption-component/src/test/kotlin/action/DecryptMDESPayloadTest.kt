@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 import utils.MDESFixture.aCipherTransformation
-import utils.MDESFixture.decryptedBody
+import utils.MDESFixture.aDecryptedBody
 import utils.MDESFixture.encryptedBody
 import utils.MDESFixture.keyFilePath
 
@@ -54,7 +54,7 @@ class DecryptMDESPayloadTest {
     }
 
     private fun then_returns_a_MDES_decrypted_payload() {
-        Assertions.assertTrue(expectedDecryptedString.contains(decryptedBody["paymentAccountReference"] as String))
+        Assertions.assertTrue(expectedDecryptedString.contains(aDecryptedBody["paymentAccountReference"] as String))
     }
 
 }
