@@ -15,6 +15,12 @@ object StringUtils {
                     decodeBase64(value)
     }
 
+    fun hexEncode(bytes: ByteArray): String {
+        val stringBuilder: StringBuilder = StringBuilder(bytes.size * 2)
+        bytes.forEach { stringBuilder.append(String.format("%02x", it)) }
+        return stringBuilder.toString();
+    }
+
     private fun decodeHex(value: String): ByteArray {
         val bytes = ByteArray(value.length / 2)
         for (i in value.indices step 2) {

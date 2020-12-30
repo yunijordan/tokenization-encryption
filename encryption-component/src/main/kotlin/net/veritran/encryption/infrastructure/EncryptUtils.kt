@@ -20,6 +20,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.OAEPParameterSpec
@@ -67,15 +69,25 @@ object EncryptUtils {
         val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
         val cipherTransformation =
             RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING.value.replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
-        val oaepParameterSpec = OAEPParameterSpec(
-            mgf1ParameterSpec.digestAlgorithm,
-            "MGF1",
-            mgf1ParameterSpec,
-            PSource.PSpecified.DEFAULT
-        )
+        val oaepParameterSpec = buildOaepParameterSpec(mgf1ParameterSpec)
         val cipher = Cipher.getInstance(cipherTransformation)
         cipher.init(Cipher.UNWRAP_MODE, privateTspKey, oaepParameterSpec)
         return cipher.unwrap(wrappedMessage, wrappedAlgorithm, Cipher.SECRET_KEY)
+    }
+
+    private fun buildOaepParameterSpec(mgf1ParameterSpec: MGF1ParameterSpec) = OAEPParameterSpec(
+        mgf1ParameterSpec.digestAlgorithm,
+        "MGF1",
+        mgf1ParameterSpec,
+        PSource.PSpecified.DEFAULT
+    )
+
+    fun wrapSecretKey(publicKey: Key, secretKey: Key, oaepPaddingDigestAlgorithm: String): ByteArray {
+        val mgf1ParameterSpec = MGF1ParameterSpec(oaepPaddingDigestAlgorithm)
+        val asymmetricCipher: String = RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING.value.replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
+        val cipher = Cipher.getInstance(asymmetricCipher)
+        cipher.init(Cipher.WRAP_MODE, publicKey, buildOaepParameterSpec(mgf1ParameterSpec))
+        return cipher.wrap(secretKey)
     }
 
     fun getPublicKey(key: String, keyAlgorithm: String): Key {
@@ -91,7 +103,7 @@ object EncryptUtils {
         return getPrivateKey(keyBytes, KeyAlgorithms.RSA.value)
     }
 
-    private fun getPrivateKey(key: ByteArray, keyAlgorithm: String): Key {
+    fun getPrivateKey(key: ByteArray, keyAlgorithm: String): Key {
         val keyFactory = KeyFactory.getInstance(keyAlgorithm)
         val keySpec = PKCS8EncodedKeySpec(key)
         return keyFactory.generatePrivate(keySpec)
@@ -146,6 +158,12 @@ object EncryptUtils {
         val cipher = Cipher.getInstance(cipherTransformation)
         cipher.init(cipherMode, key, algorithmParameterSpec)
         return cipher.doFinal(messageBytes)
+    }
+
+    fun generateSecretKey(): SecretKey {
+        val generator = KeyGenerator.getInstance(KeyAlgorithms.AES.value)
+        generator.init(128)
+        return generator.generateKey()
     }
 
     fun generateIv(ivBytes: ByteArray): IvParameterSpec = IvParameterSpec(ivBytes)
