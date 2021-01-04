@@ -16,6 +16,10 @@ import javax.crypto.spec.IvParameterSpec
 
 class EncryptMDESPayload(private val payload: String, private val key: String, private val tspKey: ByteArray) {
 
+    private lateinit var initialVector: String
+
+    fun initialVector(): String = initialVector
+
     fun execute() = encrypt(
         payload,
         key,
@@ -59,6 +63,7 @@ class EncryptMDESPayload(private val payload: String, private val key: String, p
         val secureRandom = SecureRandom.getInstance("SHA1PRNG")
         val ivBytes = ByteArray(16)
         secureRandom.nextBytes(ivBytes)
+        initialVector = hexEncode(ivBytes)
         return ivBytes
     }
 
