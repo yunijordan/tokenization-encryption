@@ -9,5 +9,4 @@ enum class HashAlgorithms(val value: String) {
             return values().any { item -> item.value == value }
         }
     }
-
 }

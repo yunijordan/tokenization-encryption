@@ -26,7 +26,7 @@ class EncryptMDESPayloadTest {
                 encryptedPayload,
                 aKey,
                 HashAlgorithms.SHA_256.value,
-                encryptMDESPayload.initialVector(),
+                encryptMDESPayload.initialVector,
                 aCipherTransformation,
                 EncryptUtils.getPrivateKey(aTSPKey, KeyAlgorithms.RSA.value)
         )
