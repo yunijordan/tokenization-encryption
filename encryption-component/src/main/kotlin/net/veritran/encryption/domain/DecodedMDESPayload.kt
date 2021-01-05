@@ -17,8 +17,8 @@ class DecodedMDESPayload(
 
         private val encoding =  EncodingValues.HEX
 
-        fun create(encryptedData: String, encryptedKey: String, initializationVector: String): DecodedMDESPayload {
-            val decodedEncryptedData = decode(encryptedData, encoding)
+        fun create(payload: String, encryptedKey: String, initializationVector: String): DecodedMDESPayload {
+            val decodedEncryptedData = decode(payload, encoding)
             val decodedEncryptedKey = decode(encryptedKey,encoding)
             val decodedIV = decode(initializationVector, encoding)
             return DecodedMDESPayload(decodedEncryptedData, decodedEncryptedKey, decodedIV)

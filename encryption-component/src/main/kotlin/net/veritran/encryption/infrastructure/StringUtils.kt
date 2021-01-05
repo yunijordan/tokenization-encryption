@@ -4,11 +4,9 @@ import net.veritran.encryption.domain.encoding.EncodingValues
 import java.util.*
 
 fun ByteArray.getHexEncode() = StringUtils.hexEncode(this)
-    /*
-    StringBuilder(this.size * 2).let { builder ->
-        this.forEach { builder.append(String.format("%02x"), it) }
-    }.toString()
-    */
+
+fun String.getHexDecode() = StringUtils.decode(this, EncodingValues.HEX)
+
 
 object StringUtils {
 

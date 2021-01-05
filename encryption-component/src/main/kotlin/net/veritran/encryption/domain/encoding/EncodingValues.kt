@@ -1,9 +1,12 @@
 package net.veritran.encryption.domain.encoding
 
+import net.veritran.encryption.infrastructure.getHexDecode
+import net.veritran.encryption.infrastructure.getHexEncode
 import java.security.Key
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.MGF1ParameterSpec
 import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource
 
@@ -23,6 +26,8 @@ enum class HashAlgorithms(val value: String) {
     }
 }
 
+const val AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5PADDING"
+const val RSA_ECB_OAEP_WITH_SHA256_AND_MGF1PADDING = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING"
 const val MGF1 = "MGF1"
 const val AES = "AES"
 val SHA256: MGF1ParameterSpec = MGF1ParameterSpec.SHA256
@@ -32,24 +37,39 @@ interface UnWrapper {
 }
 
 interface Encryptor {
-    infix fun use(message: ByteArray): ByteArray
+    infix fun use(payload: String): String
 }
 
-class MDesEncryptor: Encryptor {
-    override infix fun use(message: ByteArray): ByteArray = ByteArray(16)
+interface Decryptor {
+    infix fun use(payload: String): String
+}
+
+class EncryptorSha256(
+    private val publicKey: String,
+    private val unWrapper: UnWrapper,
+    private val ivBytes: ByteArray
+) : Encryptor {
+
+    private val privateKey: Key = publicKey.getHexDecode().let(unWrapper::use)
+
+    override infix fun use(payload: String): String {
+        return Cipher.getInstance(AES_CBC_PKCS5PADDING).also {
+            it.init(Cipher.ENCRYPT_MODE, privateKey, IvParameterSpec(ivBytes))
+        }.let { it.doFinal(payload.toByteArray()) }.getHexEncode()
+    }
 }
 
 class UnWrapperOaepWithMgf1WhichUsesSha256MD(private val privateKey: Key) : UnWrapper {
-    private val oaepWithMgf1WhichUsessha256MD: AlgorithmParameterSpec =
+    private val oaepWithMgf1WhichUsesSha256MD: AlgorithmParameterSpec =
         OAEPParameterSpec(
             SHA256.digestAlgorithm,
             MGF1,
             SHA256,
             PSource.PSpecified.DEFAULT
         )
-    private val cipher = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING"
+    private val cipher = RSA_ECB_OAEP_WITH_SHA256_AND_MGF1PADDING
         .let(Cipher::getInstance).also {
-            it.init(Cipher.UNWRAP_MODE, privateKey, oaepWithMgf1WhichUsessha256MD)
+            it.init(Cipher.UNWRAP_MODE, privateKey, oaepWithMgf1WhichUsesSha256MD)
         }
 
     override infix fun use(wrappedMessage: ByteArray): Key {

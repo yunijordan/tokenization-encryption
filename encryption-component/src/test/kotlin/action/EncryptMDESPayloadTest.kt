@@ -5,6 +5,7 @@ import net.veritran.encryption.action.EncryptMDESPayload
 import net.veritran.encryption.domain.algorithm.HashAlgorithms
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.infrastructure.EncryptUtils
+import net.veritran.encryption.infrastructure.getHexEncode
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -26,7 +27,7 @@ class EncryptMDESPayloadTest {
                 encryptedPayload,
                 aKey,
                 HashAlgorithms.SHA_256.value,
-                encryptMDESPayload.initialVector,
+                encryptMDESPayload.vector.getHexEncode(),
                 aCipherTransformation,
                 EncryptUtils.getPrivateKey(aTSPKey, KeyAlgorithms.RSA.value)
         )

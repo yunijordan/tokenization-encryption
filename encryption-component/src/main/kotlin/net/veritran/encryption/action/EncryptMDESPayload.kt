@@ -1,55 +1,28 @@
 package net.veritran.encryption.action
 
-import net.veritran.encryption.domain.algorithm.CipherTransformations
-import net.veritran.encryption.domain.algorithm.HashAlgorithms
-import net.veritran.encryption.domain.algorithm.KeyAlgorithms
-import net.veritran.encryption.domain.encoding.*
-import net.veritran.encryption.infrastructure.EncryptUtils
-import net.veritran.encryption.infrastructure.StringUtils
-import net.veritran.encryption.infrastructure.getHexEncode
+import net.veritran.encryption.domain.encoding.Encryptor
+import net.veritran.encryption.domain.encoding.EncryptorSha256
+import net.veritran.encryption.domain.encoding.UnWrapper
+import net.veritran.encryption.domain.encoding.UnWrapperOaepWithMgf1WhichUsesSha256MD
+import java.security.KeyFactory
 import java.security.SecureRandom
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
+import java.security.spec.PKCS8EncodedKeySpec
 
 class EncryptMDESPayload(
     private val payload: String,
-    private val key: String,
+    private val publicKey: String,
     private val tspKey: ByteArray
 ) {
 
-    lateinit var initialVector: String
-        private set
+    var vector = ByteArray(16)
+        .also(SecureRandom.getInstance("SHA1PRNG")::nextBytes)
 
-    private val unwrapping: UnWrapper = UnWrapperOaepWithMgf1WhichUsesSha256MD(
-        EncryptUtils.getPrivateKey(
-            tspKey,
-            KeyAlgorithms.RSA.value
-        )
-    )
+    private val unWrapper: UnWrapper = PKCS8EncodedKeySpec(tspKey)
+        .let(KeyFactory.getInstance("RSA")::generatePrivate)
+        .let(::UnWrapperOaepWithMgf1WhichUsesSha256MD)
 
-    private val encryptor: Encryptor = MDesEncryptor()
+    private val encryptor: Encryptor = EncryptorSha256(publicKey, unWrapper, vector)
 
-    fun execute(): String {
-        val ivBytes = ivBytes().also { initialVector = it.getHexEncode() }
-        /*
-         */
-        return Cipher.getInstance(CipherTransformations.AES_CBC_PKCS5PADDING.value).also {
-            it.init(Cipher.ENCRYPT_MODE, generateKey(key, HashAlgorithms.SHA_256.value), IvParameterSpec(ivBytes))
-        }.let { it.doFinal(payload.toByteArray()) }.getHexEncode()
-        /*
-        return encryptor.use(payload.toByteArray()).getHexEncode()
-         */
-    }
-
-    private fun generateKey(publicKey: String, keyAlgorithm: String) =
-        StringUtils.decode(publicKey, EncodingValues.HEX)
-            .let { unwrapping use it }
-
-    private fun ivBytes(): ByteArray {
-        val secureRandom = SecureRandom.getInstance("SHA1PRNG")
-        val ivBytes = ByteArray(16)
-        secureRandom.nextBytes(ivBytes)
-        return ivBytes
-    }
+    fun execute() = encryptor use payload
 
 }
