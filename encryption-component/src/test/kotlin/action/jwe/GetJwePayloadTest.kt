@@ -1,15 +1,15 @@
-package action
+package action.jwe
 
-import utils.EncryptFixture.aPrivateKey_2048
-import utils.EncryptFixture.aKeyAlgorithm
-import utils.EncryptFixture.anEncryptedJwe
+import utils.MessageFixture.aPrivateKey_2048
+import utils.MessageFixture.aKeyAlgorithm
+import utils.MessageFixture.anEncryptedJwe
 
-import net.veritran.encryption.action.UnwrapJWE
+import net.veritran.encryption.action.jwe.UnwrapJWE
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class GetPayloadTest {
+class GetJwePayloadTest {
     lateinit var decryptedPayload: String
     var expectedDecryptedPayload = "{\t\n\taccountNumber:\"5549567364399928\"\n}"
 

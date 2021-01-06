@@ -1,6 +1,6 @@
-package net.veritran.encryption.action
+package net.veritran.encryption.action.mastercardPayload
 
-import net.veritran.encryption.domain.DecodedMDESPayload.Factory.create
+import net.veritran.encryption.domain.DecodedMastercardPayload.Factory.create
 
 import net.veritran.encryption.infrastructure.EncryptUtils.decrypt
 import net.veritran.encryption.infrastructure.EncryptUtils.generateIv
@@ -8,7 +8,7 @@ import net.veritran.encryption.infrastructure.EncryptUtils.unwrap
 
 import java.security.Key
 
-class DecryptMDESPayload {
+class DecryptMastercardPayload {
 
     fun execute(
         encryptedData: String,

@@ -1,6 +1,6 @@
-package action
+package action.mastercardPayload
 
-import net.veritran.encryption.action.DecryptMDESPayload
+import net.veritran.encryption.action.mastercardPayload.DecryptMastercardPayload
 import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey
 
 import org.junit.jupiter.api.Assertions
@@ -8,17 +8,17 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
-import utils.MDESFixture.aCipherTransformation
-import utils.MDESFixture.aDecryptedBody
-import utils.MDESFixture.encryptedBody
-import utils.MDESFixture.keyFilePath
+import utils.MastercardFixture.aCipherTransformation
+import utils.MastercardFixture.aDecryptedBody
+import utils.MastercardFixture.encryptedBody
+import utils.MastercardFixture.keyFilePath
 
 import java.security.Key
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DecryptMDESPayloadTest {
+class DecryptMastercardPayloadTest {
 
-    private val decryptMDESPayload = DecryptMDESPayload()
+    private val decryptMastercardPayload = DecryptMastercardPayload()
 
     private lateinit var expectedDecryptedString: String
     private lateinit var anEncryptedData: String
@@ -37,13 +37,13 @@ class DecryptMDESPayloadTest {
     }
     
     @Test
-    fun decrypt_MDES_payload_successfully() {
-        when_decrypt_a_MDES_encrypted_payload()
-        then_returns_a_MDES_decrypted_payload()
+    fun decrypt_mastercard_payload_successfully() {
+        when_decrypt_a_mastercard_encrypted_payload()
+        then_returns_a_mastercard_decrypted_payload()
     }
 
-    private fun when_decrypt_a_MDES_encrypted_payload() {
-        expectedDecryptedString = decryptMDESPayload.execute(
+    private fun when_decrypt_a_mastercard_encrypted_payload() {
+        expectedDecryptedString = decryptMastercardPayload.execute(
             anEncryptedData,
             anEncryptedKey,
             aHashingAlgorithm,
@@ -53,7 +53,7 @@ class DecryptMDESPayloadTest {
         )
     }
 
-    private fun then_returns_a_MDES_decrypted_payload() {
+    private fun then_returns_a_mastercard_decrypted_payload() {
         Assertions.assertTrue(expectedDecryptedString.contains(aDecryptedBody["paymentAccountReference"] as String))
     }
 

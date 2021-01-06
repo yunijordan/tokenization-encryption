@@ -1,19 +1,19 @@
-package action
+package action.jwe
 
-import utils.EncryptFixture.aHashAlgorithm
-import utils.EncryptFixture.aMessage
-import utils.EncryptFixture.aPrivateKey
-import utils.EncryptFixture.aPublicKey
-import utils.EncryptFixture.aPublicKey_2048
-import utils.EncryptFixture.aKeyAlgorithm
-import utils.EncryptFixture.aValidCipherTransformation
-import utils.EncryptFixture.anAlgorithmIdentifier
-import utils.EncryptFixture.jwePrivateKey
+import utils.MessageFixture.aHashAlgorithm
+import utils.MessageFixture.aMessage
+import utils.MessageFixture.aPrivateKey
+import utils.MessageFixture.aPublicKey
+import utils.MessageFixture.aPublicKey_2048
+import utils.MessageFixture.aKeyAlgorithm
+import utils.MessageFixture.aValidCipherTransformation
+import utils.MessageFixture.anAlgorithmIdentifier
+import utils.MessageFixture.jwePrivateKey
 
 import net.veritran.encryption.infrastructure.JweUtils
 import net.veritran.encryption.infrastructure.EncryptUtils.signMessage
 import net.veritran.encryption.infrastructure.EncryptUtils.verifySign
-import net.veritran.encryption.action.CreateJWE
+import net.veritran.encryption.action.jwe.CreateJWE
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

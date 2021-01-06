@@ -1,6 +1,6 @@
 package net.veritran.encryption.provider
 
-import net.veritran.encryption.action.EncryptMessage
+import net.veritran.encryption.action.message.EncryptMessage
 
 class Provider() {
     fun encryptMessage(

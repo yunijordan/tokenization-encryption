@@ -12,7 +12,7 @@ import org.jose4j.lang.ByteUtil
 import java.security.Key
 import java.util.*
 
-object EncryptFixture {
+object MessageFixture {
 
     const val aMessage = "a value"
     const val anInvalidValue = "an invalid value"

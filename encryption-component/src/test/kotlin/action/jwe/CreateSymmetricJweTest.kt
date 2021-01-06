@@ -1,10 +1,10 @@
-package action
+package action.jwe
 
-import utils.EncryptFixture.aMessage
-import utils.EncryptFixture.aSymmetricKey
-import utils.EncryptFixture.symmetricKey
+import utils.MessageFixture.aMessage
+import utils.MessageFixture.aSymmetricKey
+import utils.MessageFixture.symmetricKey
 import net.veritran.encryption.infrastructure.JweUtils.jwePayload
-import net.veritran.encryption.action.CreateSymmetricJWE
+import net.veritran.encryption.action.jwe.CreateSymmetricJWE
 import net.veritran.encryption.domain.algorithm.AlgorithmIdentifiers
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package net.veritran.encryption.action
+package net.veritran.encryption.action.message
 
 import net.veritran.encryption.infrastructure.EncryptUtils.verifySign
 

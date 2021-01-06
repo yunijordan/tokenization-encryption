@@ -1,7 +1,7 @@
 package net.veritran.encryption.domain.encoding
 
-import net.veritran.encryption.infrastructure.getHexDecode
-import net.veritran.encryption.infrastructure.getHexEncode
+import net.veritran.encryption.infrastructure.hexDecode
+import net.veritran.encryption.infrastructure.hexEncode
 import java.security.Key
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.MGF1ParameterSpec
@@ -50,12 +50,12 @@ class EncryptorSha256(
     private val ivBytes: ByteArray
 ) : Encryptor {
 
-    private val privateKey: Key = publicKey.getHexDecode().let(unWrapper::use)
+    private val privateKey: Key = publicKey.hexDecode().let(unWrapper::use)
 
     override infix fun use(payload: String): String {
         return Cipher.getInstance(AES_CBC_PKCS5PADDING).also {
             it.init(Cipher.ENCRYPT_MODE, privateKey, IvParameterSpec(ivBytes))
-        }.let { it.doFinal(payload.toByteArray()) }.getHexEncode()
+        }.let { it.doFinal(payload.toByteArray()) }.hexEncode()
     }
 }
 

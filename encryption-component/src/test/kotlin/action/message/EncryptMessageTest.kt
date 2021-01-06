@@ -1,14 +1,14 @@
-package action
+package action.message
 
-import net.veritran.encryption.action.EncryptMessage
+import net.veritran.encryption.action.message.EncryptMessage
 import net.veritran.encryption.infrastructure.EncryptUtils
 
-import utils.EncryptFixture.aMessage
-import utils.EncryptFixture.aPublicKey
-import utils.EncryptFixture.aPrivateKey
-import utils.EncryptFixture.aValidCipherTransformation
-import utils.EncryptFixture.aKeyAlgorithm
-import utils.EncryptFixture.anInvalidValue
+import utils.MessageFixture.aMessage
+import utils.MessageFixture.aPublicKey
+import utils.MessageFixture.aPrivateKey
+import utils.MessageFixture.aValidCipherTransformation
+import utils.MessageFixture.aKeyAlgorithm
+import utils.MessageFixture.anInvalidValue
 
 import net.veritran.encryption.domain.error.DomainError
 import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey

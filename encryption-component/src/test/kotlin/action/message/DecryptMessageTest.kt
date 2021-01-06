@@ -1,11 +1,11 @@
-package action
+package action.message
 
-import utils.EncryptFixture.aMessage
-import utils.EncryptFixture.aPrivateKey
-import utils.EncryptFixture.anEncryptedMessage
-import utils.EncryptFixture.aValidCipherTransformation
-import utils.EncryptFixture.aKeyAlgorithm
-import net.veritran.encryption.action.DecryptMessage
+import utils.MessageFixture.aMessage
+import utils.MessageFixture.aPrivateKey
+import utils.MessageFixture.anEncryptedMessage
+import utils.MessageFixture.aValidCipherTransformation
+import utils.MessageFixture.aKeyAlgorithm
+import net.veritran.encryption.action.message.DecryptMessage
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package net.veritran.encryption.action
+package net.veritran.encryption.action.jwe
 
 import net.veritran.encryption.domain.algorithm.AlgorithmIdentifiers
 import net.veritran.encryption.infrastructure.EncryptUtils
