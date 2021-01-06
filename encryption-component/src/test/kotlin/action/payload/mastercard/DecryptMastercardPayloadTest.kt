@@ -1,6 +1,6 @@
-package action.mastercardPayload
+package action.payload.mastercard
 
-import net.veritran.encryption.action.mastercardPayload.DecryptMastercardPayload
+import net.veritran.encryption.action.payload.mastercard.DecryptMastercardPayload
 import net.veritran.encryption.infrastructure.EncryptUtils.getPrivateKey
 
 import org.junit.jupiter.api.Assertions

@@ -1,4 +1,4 @@
-package net.veritran.encryption.action.mastercardPayload
+package net.veritran.encryption.action.payload.mastercard
 
 import net.veritran.encryption.domain.DecodedMastercardPayload.Factory.create
 

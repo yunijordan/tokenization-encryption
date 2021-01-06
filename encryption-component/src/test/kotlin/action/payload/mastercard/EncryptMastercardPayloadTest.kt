@@ -1,7 +1,7 @@
-package action.mastercardPayload
+package action.payload.mastercard
 
-import net.veritran.encryption.action.mastercardPayload.DecryptMastercardPayload
-import net.veritran.encryption.action.mastercardPayload.EncryptMastercardPayload
+import net.veritran.encryption.action.payload.mastercard.DecryptMastercardPayload
+import net.veritran.encryption.action.payload.mastercard.EncryptMastercardPayload
 import net.veritran.encryption.domain.algorithm.HashAlgorithms
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.infrastructure.EncryptUtils
