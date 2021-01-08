@@ -1,31 +1,19 @@
 package net.veritran.encryption.infrastructure
 
-import net.veritran.encryption.domain.algorithm.CipherTransformations.RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.infrastructure.StringUtils.decode
-
-import java.util.*
-
 import org.jose4j.keys.AesKey
-
 import java.nio.file.Files
 import java.nio.file.Paths
-
 import java.security.Key
 import java.security.KeyFactory
 import java.security.MessageDigest
 import java.security.spec.AlgorithmParameterSpec
-import java.security.spec.MGF1ParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
-
+import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
-
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.OAEPParameterSpec
-import javax.crypto.spec.PSource
 
 object EncryptUtils {
 
@@ -58,36 +46,6 @@ object EncryptUtils {
             algorithmParameterSpec
         )
         return String(decryptedBytes)
-    }
-
-    fun unwrap(
-        wrappedMessage: ByteArray,
-        privateTspKey: Key,
-        oaepHashingAlgorithm: String,
-        wrappedAlgorithm: String = KeyAlgorithms.AES.value
-    ): Key {
-        val mgf1ParameterSpec = MGF1ParameterSpec(oaepHashingAlgorithm)
-        val cipherTransformation =
-            RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING.value.replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
-        val oaepParameterSpec = buildOaepParameterSpec(mgf1ParameterSpec)
-        val cipher = Cipher.getInstance(cipherTransformation)
-        cipher.init(Cipher.UNWRAP_MODE, privateTspKey, oaepParameterSpec)
-        return cipher.unwrap(wrappedMessage, wrappedAlgorithm, Cipher.SECRET_KEY)
-    }
-
-    private fun buildOaepParameterSpec(mgf1ParameterSpec: MGF1ParameterSpec) = OAEPParameterSpec(
-        mgf1ParameterSpec.digestAlgorithm,
-        "MGF1",
-        mgf1ParameterSpec,
-        PSource.PSpecified.DEFAULT
-    )
-
-    fun wrapSecretKey(publicKey: Key, secretKey: Key, oaepPaddingDigestAlgorithm: String): ByteArray {
-        val mgf1ParameterSpec = MGF1ParameterSpec(oaepPaddingDigestAlgorithm)
-        val asymmetricCipher: String = RSA_ECB_OAEPWITHSHA_256ANDMGF1PADDING.value.replace("{ALG}", mgf1ParameterSpec.digestAlgorithm)
-        val cipher = Cipher.getInstance(asymmetricCipher)
-        cipher.init(Cipher.WRAP_MODE, publicKey, buildOaepParameterSpec(mgf1ParameterSpec))
-        return cipher.wrap(secretKey)
     }
 
     fun getPublicKey(key: String, keyAlgorithm: String): Key {
@@ -160,13 +118,9 @@ object EncryptUtils {
         return cipher.doFinal(messageBytes)
     }
 
-    fun generateSecretKey(): SecretKey {
-        val generator = KeyGenerator.getInstance(KeyAlgorithms.AES.value)
-        generator.init(128)
-        return generator.generateKey()
-    }
-
-    fun generateIv(ivBytes: ByteArray): IvParameterSpec = IvParameterSpec(ivBytes)
+    fun generateSecretKey(): Key = KeyGenerator.getInstance(KeyAlgorithms.AES.value)
+            .also { it.init(128) }
+            .generateKey()
 
     fun generateAesKey(bytes: ByteArray): Key = AesKey(bytes)
 

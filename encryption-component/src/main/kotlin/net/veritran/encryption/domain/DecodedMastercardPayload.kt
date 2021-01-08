@@ -4,14 +4,14 @@ import net.veritran.encryption.domain.encoding.EncodingValues
 import net.veritran.encryption.infrastructure.StringUtils.decode
 
 class DecodedMastercardPayload(
-    private val encryptedDataBytes: ByteArray,
-    private val wrappedKeyBytes: ByteArray,
-    private val ivBytes: ByteArray
+    private val decodedEncryptedData: ByteArray,
+    private val decodedEncryptedKey: ByteArray,
+    private val decodedIV: ByteArray
 ){
 
-    fun encryptedData(): ByteArray = encryptedDataBytes
-    fun wrappedKey(): ByteArray = wrappedKeyBytes
-    fun iv(): ByteArray = ivBytes
+    fun getDecodedEncryptedData(): ByteArray = decodedEncryptedData
+    fun getDecodedEncryptedKey(): ByteArray = decodedEncryptedKey
+    fun getDecodedIV(): ByteArray = decodedIV
 
     companion object Factory {
 
