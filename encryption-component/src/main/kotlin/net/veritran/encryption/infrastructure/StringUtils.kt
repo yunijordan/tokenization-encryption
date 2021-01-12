@@ -5,6 +5,7 @@ import java.util.*
 
 fun ByteArray.hexEncode() = StringUtils.hexEncode(this)
 fun String.hexDecode() = StringUtils.decode(this, EncodingValues.HEX)
+fun String.Base64Decode() = StringUtils.decode(this, EncodingValues.BASE64)
 
 object StringUtils {
 

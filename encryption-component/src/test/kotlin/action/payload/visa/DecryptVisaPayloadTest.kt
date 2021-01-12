@@ -4,24 +4,27 @@ import net.veritran.encryption.action.payload.visa.DecryptVisaPayload
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import utils.VisaFixture.aKey
+
+import utils.VisaFixture.aValidJws
+import utils.VisaFixture.decryptedPayloadExpected
 
 class DecryptVisaPayloadTest {
 
-    private lateinit var decryptedResult: String
-    private val decryptVisaPayload = DecryptVisaPayload()
+    private lateinit var decryptedPayloadResult: String
+    private var decryptVisaPayload = DecryptVisaPayload()
 
     @Test
-    fun decrypt_visa_payload_successfully() {
-        when_decrypt_a_visa_encrypted_payload()
-        then_returns_a_visa_decrypted_payload()
+    fun `Decrypt a Visa payload successfully`() {
+        when_decrypt_a_jwe_payload()
+        then_returns_a_decrypted_payload()
     }
 
-    private fun when_decrypt_a_visa_encrypted_payload() {
-        decryptedResult = decryptVisaPayload.execute()
+    private fun when_decrypt_a_jwe_payload() {
+        decryptedPayloadResult = decryptVisaPayload.execute(aValidJws, aKey)
     }
 
-    private fun then_returns_a_visa_decrypted_payload() {
-        Assertions.assertTrue(decryptedResult.contains(""))
-    }
+    private fun then_returns_a_decrypted_payload() =
+        Assertions.assertEquals(decryptedPayloadExpected, decryptedPayloadResult)
 
 }
