@@ -15,21 +15,14 @@ class EncrypterMastercardPayloadTest {
     fun encrypt_mastercard_payload_successfully() {
         val encryptMastercardPayload = EncrypterMastercardPayload(
             aDecryptedBody.toJsonString(),
-            classPathX509CertificateFinder,
-            classPathPkcs8RsaKeyFinder
+            classPathX509CertificateFinder
         )
         val pemFilePath = "src/test/resources/certificates/test_certificate-2048.pem"
         val derFilePath = "src/test/resources/keys/test_key_pkcs8-2048.der"
 
-        val encryptedPayload = encryptMastercardPayload.execute(
-            //body
-            pemFilePath,
-            derFilePath
-        )
+        val encryptedPayload = encryptMastercardPayload.execute(pemFilePath)
 
-        val decryptMastercardPayload = DecryptorMastercardPayload(
-            classPathPkcs8RsaKeyFinder
-        )
+        val decryptMastercardPayload = DecryptorMastercardPayload(classPathPkcs8RsaKeyFinder)
 
         val decryptedPayload = decryptMastercardPayload.execute(
             encryptedPayload,

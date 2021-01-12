@@ -40,9 +40,7 @@ class DecryptorMastercardPayloadTest {
     }
 
     private fun when_decrypt_a_mastercard_encrypted_payload() {
-        val decryptMastercardPayload = DecryptorMastercardPayload(
-            classPathPkcs8RsaKeyFinder
-        )
+        val decryptMastercardPayload = DecryptorMastercardPayload(classPathPkcs8RsaKeyFinder)
         expectedDecryptedString = decryptMastercardPayload.execute(
             anEncryptedData,
             anEncryptedKey,

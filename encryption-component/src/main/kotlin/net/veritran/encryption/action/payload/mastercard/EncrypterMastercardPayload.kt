@@ -2,7 +2,6 @@ package net.veritran.encryption.action.payload.mastercard
 
 import net.veritran.encryption.domain.encoding.EncryptorSha256
 import net.veritran.encryption.domain.encoding.KeyFinder
-import net.veritran.encryption.domain.encoding.UnWrapperOaepWithMgf1WhichUsesSha256MD
 import net.veritran.encryption.domain.encoding.WrapperOaepWithMgf1WhichUsesSha256MD
 import net.veritran.encryption.infrastructure.hexEncode
 import java.security.Key
@@ -11,8 +10,7 @@ import javax.crypto.KeyGenerator
 
 class EncrypterMastercardPayload(
     private val payload: String,
-    private val publicKeyFinder: KeyFinder,
-    private val privateKeyFinder: KeyFinder
+    private val publicKeyFinder: KeyFinder
 ) {
 
     val vector: ByteArray = ByteArray(16)
@@ -26,14 +24,12 @@ class EncrypterMastercardPayload(
         private set
 
     fun execute(
-        publicKey: String,
-        privateKey: String
+        publicKey: String
     ): String {
-        val unwrapper = privateKeyFinder.find(privateKey).let(::UnWrapperOaepWithMgf1WhichUsesSha256MD)
-        val keyEncryptor = publicKeyFinder.find(publicKey).let(::WrapperOaepWithMgf1WhichUsesSha256MD)
+        publicKeyFinder.find(publicKey).let(::WrapperOaepWithMgf1WhichUsesSha256MD)
             .use(aes128Key).also { encryptedKey = it.hexEncode() }
         return EncryptorSha256(
-            keyEncryptor.let(unwrapper::use),
+            aes128Key,
             vector
         ) use payload
     }

@@ -66,15 +66,23 @@ class DecryptorPkcs5Padding(
 }
 
 class EncryptorSha256(
-    private val privateKey: Key,
-    private val ivBytes: ByteArray
+    private val key: Key,
+    private val algorithmParameterSpec: ByteArray
 ) : Encryptor {
     override infix fun use(payload: String): String {
         return Cipher.getInstance(AES_CBC_PKCS5PADDING).also {
-            it.init(Cipher.ENCRYPT_MODE, privateKey, IvParameterSpec(ivBytes))
+            it.init(Cipher.ENCRYPT_MODE, key, IvParameterSpec(algorithmParameterSpec))
         }.let { it.doFinal(payload.toByteArray()) }.hexEncode()
     }
 }
+
+val oaepWithMgf1WhichUsesSha256MD: AlgorithmParameterSpec =
+    OAEPParameterSpec(
+        SHA256.digestAlgorithm,
+        MGF1,
+        SHA256,
+        PSource.PSpecified.DEFAULT
+    )
 
 class WrapperOaepWithMgf1WhichUsesSha256MD(
     private val publicKey: Key,
@@ -89,13 +97,6 @@ class WrapperOaepWithMgf1WhichUsesSha256MD(
     }
 }
 
-val oaepWithMgf1WhichUsesSha256MD: AlgorithmParameterSpec =
-    OAEPParameterSpec(
-        SHA256.digestAlgorithm,
-        MGF1,
-        SHA256,
-        PSource.PSpecified.DEFAULT
-    )
 
 class UnWrapperOaepWithMgf1WhichUsesSha256MD(private val privateKey: Key) : UnWrapper {
     private val cipher = RSA_ECB_OAEP_WITH_SHA256_AND_MGF1PADDING

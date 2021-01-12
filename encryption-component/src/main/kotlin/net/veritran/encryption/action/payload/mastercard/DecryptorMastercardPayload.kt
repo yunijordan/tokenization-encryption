@@ -11,11 +11,11 @@ class DecryptorMastercardPayload(private val keyFinder: KeyFinder) {
         encryptedData: String,
         encryptedKey: String,
         iv: String,
-        privateTspKey: String
+        publicKey: String
     ): String {
-        val unWrapper = UnWrapperOaepWithMgf1WhichUsesSha256MD(keyFinder.find(privateTspKey))
-        val privateKey = unWrapper.use(encryptedKey.hexDecode())
-        return DecryptorPkcs5Padding(privateKey, iv.hexDecode()).use(encryptedData)
+        val unWrapper = publicKey.let(keyFinder::find).let(::UnWrapperOaepWithMgf1WhichUsesSha256MD)
+        val privateKey = unWrapper use encryptedKey.hexDecode()
+        return DecryptorPkcs5Padding(privateKey, iv.hexDecode()) use encryptedData
     }
 
 }
