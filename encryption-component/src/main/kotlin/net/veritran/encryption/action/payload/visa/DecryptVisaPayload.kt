@@ -1,54 +1,58 @@
 package net.veritran.encryption.action.payload.visa
 
+import com.nimbusds.jose.JWEObject
 import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.JWSVerifier
+import com.nimbusds.jose.crypto.RSADecrypter
 import com.nimbusds.jose.crypto.RSASSAVerifier
 
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import net.veritran.encryption.domain.error.InvalidJwsException
 import net.veritran.encryption.domain.error.InvalidSignatureException
-import net.veritran.encryption.infrastructure.Base64Decode
+import net.veritran.encryption.infrastructure.base64Decode
 
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
+import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 class DecryptVisaPayload {
 
-    fun execute(jws: String, key: String): String {
-        verifySignature(jws, key)
+    fun execute(jws: String, signaturePublicKey: String, decryptionPrivateKey: String): String {
+        verifySignature(jws, signaturePublicKey)
         val jwsData: JWSData = parseJws(jws)
-        return decryptPayload(jwsData.payload())
+        return decryptPayload(jwsData.payload(), decryptionPrivateKey.toByteArray())
     }
 
-    private fun verifySignature(jws: String, key: String) {
+    private fun verifySignature(jws: String, signaturePublicKey: String) {
         val keyFactory: KeyFactory = KeyFactory.getInstance(KeyAlgorithms.RSA.value)
-        val publicKey: RSAPublicKey = keyFactory.generatePublic(X509EncodedKeySpec(key.toByteArray())) as RSAPublicKey
-        val verifier: JWSVerifier = RSASSAVerifier(publicKey)
-        if(!JWSObject.parse(jws).verify(verifier))
+        val rsaPublicKey: RSAPublicKey = keyFactory
+                .generatePublic(X509EncodedKeySpec(signaturePublicKey.toByteArray())) as RSAPublicKey
+        val verifier: JWSVerifier = RSASSAVerifier(rsaPublicKey)
+        if (!JWSObject.parse(jws).verify(verifier))
             throw InvalidSignatureException("The JWS Signature verify failed")
+    }
+
+    private fun decryptPayload(jwe: String, decryptionPrivateKey: ByteArray): String {
+        val jweObject = JWEObject.parse(jwe)
+        val rsaPrivateKey = KeyFactory
+            .getInstance(KeyAlgorithms.RSA.value)
+            .generatePrivate(PKCS8EncodedKeySpec(decryptionPrivateKey))
+        val decryptor = RSADecrypter(rsaPrivateKey)
+        jweObject.decrypt(decryptor)
+        return jweObject.payload.toString()
     }
 
     private fun parseJws(jws: String): JWSData {
         val jwsComponents = jws.split(".")
-        if(jwsComponents.size != 3)
+        if (jwsComponents.size != 3)
             throw InvalidJwsException("The JWS doesn't contains three parts")
-        return JWSData(jwsComponents[0], jwsComponents[1], jwsComponents[2])
+        return JWSData(jwsComponents[1])
     }
 
-    private fun decryptPayload(jws: String): String {
-        return "{$jws}"
+    data class JWSData(private val payload: String) {
+        fun payload() = String(payload.base64Decode())
     }
-
-    class JWSData(
-        private val header: String,
-        private val payload: String,
-        private val signature: String
-    ) {
-
-        fun payload() = payload
-        fun decode(encodedValue: String) = encodedValue.Base64Decode()
-
-     }
 
 }
+

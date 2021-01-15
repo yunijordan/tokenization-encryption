@@ -49,6 +49,7 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     implementation("org.bitbucket.b_c:jose4j:0.7.2")
     implementation("com.nimbusds:nimbus-jose-jwt:5.8")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
 
     implementation("com.beust:klaxon:5.0.1")
 
