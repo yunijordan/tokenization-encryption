@@ -1,12 +1,18 @@
 package net.veritran.encryption.domain.jwt
 
+import net.veritran.encryption.domain.algorithm.KeyAlgorithms
+
 import com.nimbusds.jose.*
 import com.nimbusds.jose.crypto.RSAEncrypter
 import com.nimbusds.jose.crypto.RSASSASigner
-import net.veritran.encryption.domain.algorithm.KeyAlgorithms
+
 import java.security.KeyFactory
+import java.security.PrivateKey
+import java.security.PublicKey
+
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
+
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
@@ -15,25 +21,23 @@ class JWE(val payload: String) {
     private lateinit var value: String
     
     fun create(header: String, publicKey: String) {
-        val jweHeader: JWEHeader = JWEHeader.parse(header)
-        val jweObject = JWEObject(jweHeader, Payload(payload))
-        val rsaPublicKey = KeyFactory
-                .getInstance(KeyAlgorithms.RSA.value)
-                .generatePublic(X509EncodedKeySpec(publicKey.toByteArray())) as RSAPublicKey
-        val encryptor = RSAEncrypter(rsaPublicKey)
+        val jweObject = JWEObject(JWEHeader.parse(header), Payload(payload))
+        val encryptor = RSAEncrypter(generatePublicKey(publicKey) as RSAPublicKey)
         jweObject.encrypt(encryptor)
-        value = jweObject.serialize()
+        this.value = jweObject.serialize()
     }
 
-    fun sign(header: String, signaturePrivateKey: String): String {
-        val jwsHeader: JWSHeader = JWSHeader.parse(header)
-        val rsaPrivateKey = KeyFactory
-                .getInstance(KeyAlgorithms.RSA.value)
-                .generatePrivate(PKCS8EncodedKeySpec(signaturePrivateKey.toByteArray())) as RSAPrivateKey
-        val jwsSigner: JWSSigner = RSASSASigner(rsaPrivateKey)
-        val jwsObject = JWSObject(jwsHeader, Payload(value))
-        jwsObject.sign(jwsSigner)
+    fun sign(header: String, privateKey: String): String {
+        val signer = RSASSASigner(generatePrivateKey(privateKey) as RSAPrivateKey)
+        val jwsObject = JWSObject(JWSHeader.parse(header), Payload(value))
+        jwsObject.sign(signer)
         return jwsObject.serialize()
     }
+
+    private fun generatePublicKey(publicKey: String): PublicKey =
+        KeyFactory.getInstance(KeyAlgorithms.RSA.value).generatePublic(X509EncodedKeySpec(publicKey.toByteArray()))
+
+    private fun generatePrivateKey(privateKey: String): PrivateKey =
+        KeyFactory.getInstance(KeyAlgorithms.RSA.value).generatePrivate(PKCS8EncodedKeySpec(privateKey.toByteArray()))
 
 }
