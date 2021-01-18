@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test
 
 import utils.VisaFixture.aDecryptedPayload
 import utils.VisaFixture.aEncryptionPublicKey
+import utils.VisaFixture.aJweHeader
+import utils.VisaFixture.aJwsHeader
 import utils.VisaFixture.aSignaturePrivateKey
 import utils.VisaFixture.encryptedJwsExpected
 
@@ -22,7 +24,13 @@ class EncryptVisaPayloadTest {
     }
 
     private fun when_encrypt_a_payload() {
-        encryptedJws = encryptVisaPayload.execute(aDecryptedPayload, aEncryptionPublicKey, aSignaturePrivateKey)
+        encryptedJws = encryptVisaPayload.execute(
+                aDecryptedPayload,
+                aEncryptionPublicKey,
+                aSignaturePrivateKey,
+                aJweHeader,
+                aJwsHeader
+        )
     }
 
     private fun then_returns_a_jws() = Assertions.assertEquals(encryptedJws, encryptedJwsExpected)

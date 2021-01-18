@@ -3,8 +3,10 @@ package net.veritran.encryption.action.payload.visa
 import com.nimbusds.jose.*
 import com.nimbusds.jose.crypto.RSAEncrypter
 import com.nimbusds.jose.crypto.RSASSASigner
+
 import net.veritran.encryption.domain.algorithm.KeyAlgorithms
 import java.security.KeyFactory
+
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
@@ -12,10 +14,15 @@ import java.security.spec.X509EncodedKeySpec
 
 class EncryptVisaPayload {
 
-    //TODO: Define jwe and jws headers (alg, enc, typ...)
-    fun execute(payload: String, encryptionPublicKey: String, signaturePrivateKey: String): String {
-        val jwe =  createJwe(payload, "", encryptionPublicKey)
-        return createJws(jwe, "", signaturePrivateKey)
+    fun execute(
+            payload: String,
+            encryptionPublicKey: String,
+            signaturePrivateKey: String,
+            jweHeader: String,
+            jwsHeader: String
+    ): String {
+        val jwe = createJwe(payload, jweHeader, encryptionPublicKey)
+        return signJwe(jwe, jwsHeader, signaturePrivateKey)
     }
 
     private fun createJwe(payload: String, header: String, publicKey: String): String {
@@ -29,7 +36,7 @@ class EncryptVisaPayload {
         return jweObject.serialize()
     }
 
-    private fun createJws(jwe: String, header: String, signaturePrivateKey: String): String {
+    private fun signJwe(jwe: String, header: String, signaturePrivateKey: String): String {
         val jwsHeader: JWSHeader = JWSHeader.parse(header)
         val rsaPrivateKey = KeyFactory
             .getInstance(KeyAlgorithms.RSA.value)
