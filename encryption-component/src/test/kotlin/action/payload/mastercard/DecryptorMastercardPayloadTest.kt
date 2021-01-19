@@ -1,7 +1,7 @@
 package action.payload.mastercard
 
 import net.veritran.encryption.action.payload.mastercard.DecryptorMastercardPayload
-import net.veritran.encryption.domain.encoding.classPathPkcs8RsaKeyFinder
+import net.veritran.encryption.infrastructure.adapter.driven.classPathPkcs8RsaLoader
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import utils.MastercardFixture.aDecryptedBody
@@ -19,7 +19,7 @@ class DecryptorMastercardPayloadTest {
     }
 
     private fun when_decrypt_a_mastercard_encrypted_payload() {
-        val decryptMastercardPayload = DecryptorMastercardPayload(classPathPkcs8RsaKeyFinder)
+        val decryptMastercardPayload = DecryptorMastercardPayload(classPathPkcs8RsaLoader)
         expectedDecryptedString = decryptMastercardPayload.execute(
             encryptedBody.toJsonString(),
             keyFilePath
