@@ -1,9 +1,9 @@
-package net.veritran.encryption.infrastructure.adapter.driven
+package net.veritran.encryption.infrastructure.adapter.outbound
 
 import net.veritran.encryption.infrastructure.hexDecode
 import net.veritran.encryption.infrastructure.hexEncode
-import net.veritran.encryption.port.driven.Decryptor
-import net.veritran.encryption.port.driven.Encryptor
+import net.veritran.encryption.port.outbound.Decryptor
+import net.veritran.encryption.port.outbound.Encryptor
 import java.security.Key
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec

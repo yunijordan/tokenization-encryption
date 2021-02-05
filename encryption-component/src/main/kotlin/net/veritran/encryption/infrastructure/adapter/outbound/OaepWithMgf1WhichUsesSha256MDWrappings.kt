@@ -1,8 +1,8 @@
-package net.veritran.encryption.infrastructure.adapter.driven
+package net.veritran.encryption.infrastructure.adapter.outbound
 
 
-import net.veritran.encryption.port.driven.Unwrapper
-import net.veritran.encryption.port.driven.Wrapper
+import net.veritran.encryption.port.outbound.Unwrapper
+import net.veritran.encryption.port.outbound.Wrapper
 import java.security.Key
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.MGF1ParameterSpec.SHA256

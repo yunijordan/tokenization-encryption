@@ -1,2 +1,2 @@
 rootProject.name = "encryption-component"
-include("src.main.kotlin.net.veritran.encryption.provider")
+include("src.main.kotlin.net.veritran.encryption")

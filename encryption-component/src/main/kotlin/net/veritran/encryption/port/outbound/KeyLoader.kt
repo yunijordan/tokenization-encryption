@@ -1,4 +1,4 @@
-package net.veritran.encryption.port.driven
+package net.veritran.encryption.port.outbound
 
 import java.security.Key
 
