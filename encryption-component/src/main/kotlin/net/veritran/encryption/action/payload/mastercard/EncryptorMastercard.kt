@@ -5,13 +5,13 @@ import net.veritran.encryption.domain.mastercard.EncryptedMastercardPayload
 import net.veritran.encryption.infrastructure.adapter.outbound.AesCbcPkcs5PaddingEncryptor
 import net.veritran.encryption.infrastructure.hexEncode
 import net.veritran.encryption.port.outbound.Encryptor
-import net.veritran.encryption.port.outbound.KeyLoader
+import net.veritran.encryption.port.outbound.keys.CipherKeyLoader
 import java.security.Key
 import java.security.SecureRandom
 import javax.crypto.KeyGenerator
 import net.veritran.encryption.infrastructure.adapter.outbound.WrapperOaepWithMgf1WhichUsesSha256MD as WrapperMGF1
 
-class EncryptorMastercardPayload(private val keyLoader: KeyLoader) {
+class EncryptorMastercard(private val publicMastercardKeyLoader: MastercardPublicKeyLoader) {
 
     private fun EncryptedMastercardPayload.toJson() = Klaxon().toJsonString(this)
 
@@ -24,11 +24,8 @@ class EncryptorMastercardPayload(private val keyLoader: KeyLoader) {
 
     private val encryptor: Encryptor = AesCbcPkcs5PaddingEncryptor(aes128Key, vector)
 
-    fun execute(
-        payload: String,
-        publicKey: String
-    ): String {
-        val encryptedKey = keyLoader.from(publicKey)
+    fun execute(payload: String): String {
+        val encryptedKey = publicMastercardKeyLoader.get()
             .let(::WrapperMGF1)
             .invoke(aes128Key).hexEncode()
         return EncryptedMastercardPayload(
@@ -37,5 +34,7 @@ class EncryptorMastercardPayload(private val keyLoader: KeyLoader) {
             encryptedData = encryptor(payload),
         ).toJson()
     }
+
+    fun interface MastercardPublicKeyLoader : CipherKeyLoader
 
 }

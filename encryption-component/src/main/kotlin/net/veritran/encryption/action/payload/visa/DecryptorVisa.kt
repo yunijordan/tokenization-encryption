@@ -6,25 +6,21 @@ import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.JWSVerifier
 import com.nimbusds.jose.crypto.RSADecrypter
 import com.nimbusds.jose.crypto.RSASSAVerifier
-import com.nimbusds.jose.util.Base64URL
-import net.veritran.encryption.port.outbound.KeyLoader
+import net.veritran.encryption.port.outbound.keys.CipherKeyLoader
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
 class DecryptorVisa(
-    private val classPathPkcs8RsaPrivateKeyLoader: KeyLoader,
-    private val classPathX509PublicKeyLoader: KeyLoader
+    private val visaPrivateKeyLoader: VisaPrivateKeyLoader,
+    private val visaVerifierKeyLoader: VisaVerifierKeyLoader
 ) {
-    val publicKeyName = "src/test/resources/visa/test1.pub"
-    val verifier: JWSVerifier = RSASSAVerifier(
-        classPathX509PublicKeyLoader.from(publicKeyName) as RSAPublicKey
+    private val verifier: JWSVerifier = RSASSAVerifier(
+        visaVerifierKeyLoader.get() as RSAPublicKey
     )
 
-    fun String.toBase64Url() = Base64URL(this)
-
-    fun execute(encryptedAndSignedMessage: String, keyName: String): String {
+    fun execute(encryptedAndSignedMessage: String): String {
         val decrypter: JWEDecrypter = RSADecrypter(
-            classPathPkcs8RsaPrivateKeyLoader.from(keyName) as RSAPrivateKey
+            visaPrivateKeyLoader.get() as RSAPrivateKey
         )
         val payload = JWSObject.parse(encryptedAndSignedMessage).takeIf { it.verify(verifier) }
             ?.payload
@@ -32,5 +28,8 @@ class DecryptorVisa(
 
         return JWEObject.parse(payload).also { it.decrypt(decrypter) }.payload.toString()
     }
+
+    fun interface VisaPrivateKeyLoader : CipherKeyLoader
+    fun interface VisaVerifierKeyLoader : CipherKeyLoader
 
 }
