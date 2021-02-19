@@ -1,7 +1,7 @@
 version = "1.0.0"
 val nexusRepo = "https://nexus-ar.veritran.net/repository/tokenization/"
-val nexusUser:String = ""
-val nexusPassword:String = ""
+val nexusUser:String  by project
+val nexusPassword:String by project
 
 plugins {
     java
