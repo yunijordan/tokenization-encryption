@@ -1,19 +1,20 @@
-package net.veritran.encryption.action.payload.mastercard
+package net.veritran.encryption.action.payload.istp
 
 import com.beust.klaxon.Klaxon
 import net.veritran.encryption.domain.mastercard.EncryptedMastercardPayload
 import net.veritran.encryption.infrastructure.adapter.outbound.AesCbcPkcs5PaddingEncryptor
+import net.veritran.encryption.infrastructure.adapter.outbound.WrapperOaepWithMgf1WhichUsesSha256MD
 import net.veritran.encryption.infrastructure.hexEncode
 import net.veritran.encryption.port.inbound.CipherAction
 import net.veritran.encryption.port.outbound.Encryptor
 import net.veritran.encryption.port.outbound.keys.CipherKeyLoader
 import java.security.Key
 import java.security.SecureRandom
+import java.util.*
 import javax.crypto.KeyGenerator
-import net.veritran.encryption.infrastructure.adapter.outbound.WrapperOaepWithMgf1WhichUsesSha256MD as WrapperMGF1
 
-class EncryptorMastercard(
-    private val publicMastercardKeyLoader: MastercardPublicKeyLoader
+class EncryptorItsp(
+    private val itspPublicKeyLoader: PublicItspKeyLoader
 ) : CipherAction {
 
     private fun EncryptedMastercardPayload.toJson() = Klaxon().toJsonString(this)
@@ -28,16 +29,15 @@ class EncryptorMastercard(
     private val encryptor: Encryptor = AesCbcPkcs5PaddingEncryptor(aes128Key, vector)
 
     override fun execute(payload: String): String {
-        val encryptedKey = publicMastercardKeyLoader.get()
-            .let(::WrapperMGF1)
+        val encryptedKey = itspPublicKeyLoader.get()
+            .let(::WrapperOaepWithMgf1WhichUsesSha256MD)
             .invoke(aes128Key).hexEncode()
         return EncryptedMastercardPayload(
             encryptedKey = encryptedKey,
             iv = vector.hexEncode(),
             encryptedData = encryptor(payload),
-        ).toJson()
+        ).toJson().let { Base64.getEncoder().encodeToString(it.toByteArray()) }
     }
 
-    fun interface MastercardPublicKeyLoader : CipherKeyLoader
-
+    fun interface PublicItspKeyLoader : CipherKeyLoader
 }

@@ -32,7 +32,6 @@ class EncryptorVisaTest {
 
         // when
         val result = encryptorVisa.execute(payload)
-
         // then
         val msgDecrypted = decrypt(result)
         Assertions.assertEquals(payload, msgDecrypted)

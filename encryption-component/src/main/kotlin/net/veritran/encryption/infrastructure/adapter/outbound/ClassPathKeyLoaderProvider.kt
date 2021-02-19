@@ -1,5 +1,7 @@
 package net.veritran.encryption.infrastructure.adapter.outbound
 
+import net.veritran.encryption.action.payload.istp.DecryptorItsp.PrivateItspKeyLoader
+import net.veritran.encryption.action.payload.istp.EncryptorItsp.PublicItspKeyLoader
 import net.veritran.encryption.action.payload.mastercard.DecryptorMastercard.MastercardPrivateKeyLoader
 import net.veritran.encryption.action.payload.mastercard.EncryptorMastercard.MastercardPublicKeyLoader
 import net.veritran.encryption.action.payload.visa.DecryptorVisa.VisaPrivateKeyLoader
@@ -28,6 +30,9 @@ class ClassPathKeyLoaderProvider private constructor(
     fun asVisaPublicKey() = VisaPublicKeyLoader { x509PublicKeyLoader(path) }
     fun asVisaVerifierKey() = VisaVerifierKeyLoader { x509PublicKeyLoader(path) }
     fun asVisaSingerKey() = VisaSignerKeyLoader { pkcs8RsaPrivateKeyLoader(path) }
+
+    fun asItspPrivateKey() = PrivateItspKeyLoader { pkcs8RsaPrivateKeyLoader(path) }
+    fun asItspPublicKey() = PublicItspKeyLoader { x509PublicCertLoader(path) }
 
     companion object Factory {
         private val instances: MutableMap<String, ClassPathKeyLoaderProvider> = mutableMapOf()

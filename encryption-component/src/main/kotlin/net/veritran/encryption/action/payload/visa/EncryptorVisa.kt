@@ -4,6 +4,7 @@ import com.nimbusds.jose.*
 import com.nimbusds.jose.JOSEObjectType.JOSE
 import com.nimbusds.jose.crypto.RSAEncrypter
 import com.nimbusds.jose.crypto.RSASSASigner
+import net.veritran.encryption.port.inbound.CipherAction
 import net.veritran.encryption.port.outbound.keys.CipherKeyLoader
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -13,11 +14,12 @@ import javax.crypto.SecretKey
 class EncryptorVisa(
     private val publicVisaKeyLoader: VisaPublicKeyLoader,
     private val privateSignatureKeyLoader: VisaSignerKeyLoader
-) {
-    private val kid = "7ZEIVC16DGRDQKWZEE3X11LeJMDhyqQu8Q1ctnp4bylyQJCsw"
+): CipherAction {
 
+    private val kid = "7ZEIVC16DGRDQKWZEE3X11LeJMDhyqQu8Q1ctnp4bylyQJCsw"
     private val secretKey: SecretKey = KeyGenerator.getInstance("AES").also { it.init(256) }.generateKey()
-    fun execute(message: String): String {
+
+    override fun execute(message: String): String {
         val jweEncrypter: JWEEncrypter = RSAEncrypter(
             publicVisaKeyLoader.get() as RSAPublicKey,
             secretKey

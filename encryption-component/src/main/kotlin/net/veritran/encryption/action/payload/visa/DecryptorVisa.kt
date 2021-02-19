@@ -6,6 +6,7 @@ import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.JWSVerifier
 import com.nimbusds.jose.crypto.RSADecrypter
 import com.nimbusds.jose.crypto.RSASSAVerifier
+import net.veritran.encryption.port.inbound.CipherAction
 import net.veritran.encryption.port.outbound.keys.CipherKeyLoader
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -13,12 +14,12 @@ import java.security.interfaces.RSAPublicKey
 class DecryptorVisa(
     private val visaPrivateKeyLoader: VisaPrivateKeyLoader,
     private val visaVerifierKeyLoader: VisaVerifierKeyLoader
-) {
+) : CipherAction {
     private val verifier: JWSVerifier = RSASSAVerifier(
         visaVerifierKeyLoader.get() as RSAPublicKey
     )
 
-    fun execute(encryptedAndSignedMessage: String): String {
+    override fun execute(encryptedAndSignedMessage: String): String {
         val decrypter: JWEDecrypter = RSADecrypter(
             visaPrivateKeyLoader.get() as RSAPrivateKey
         )
