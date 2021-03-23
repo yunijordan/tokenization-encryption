@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+}
+
+group = 'com.veritran'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'http://nexus-ar.veritran.net/repository/tokenization/'
+        credentials {
+            username = "uploader"
+            password = "v3t1tr4n"
+        }
+    }
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.veritran.tokenization:encryption-component:1.0.0'
+    implementation('io.springfox:springfox-boot-starter:3.0.0')
+    implementation('io.springfox:springfox-swagger-ui:2.9.2')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
