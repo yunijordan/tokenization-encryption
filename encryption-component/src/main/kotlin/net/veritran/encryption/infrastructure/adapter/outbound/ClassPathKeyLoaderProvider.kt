@@ -1,7 +1,7 @@
 package net.veritran.encryption.infrastructure.adapter.outbound
 
-import net.veritran.encryption.action.payload.istp.DecryptorItsp.PrivateItspKeyLoader
-import net.veritran.encryption.action.payload.istp.EncryptorItsp.PublicItspKeyLoader
+import net.veritran.encryption.action.payload.itsp.DecryptorItsp.PrivateItspKeyLoader
+import net.veritran.encryption.action.payload.itsp.EncryptorItsp.PublicItspKeyLoader
 import net.veritran.encryption.action.payload.mastercard.DecryptorMastercard.MastercardPrivateKeyLoader
 import net.veritran.encryption.action.payload.mastercard.EncryptorMastercard.MastercardPublicKeyLoader
 import net.veritran.encryption.action.payload.visa.DecryptorVisa.VisaPrivateKeyLoader

@@ -1,4 +1,4 @@
-package net.veritran.encryption.action.payload.istp
+package net.veritran.encryption.action.payload.itsp
 
 import com.beust.klaxon.Klaxon
 import net.veritran.encryption.domain.mastercard.EncryptedMastercardPayload

@@ -1,7 +1,7 @@
 package action.payload.itsp
 
-import net.veritran.encryption.action.payload.istp.DecryptorItsp
-import net.veritran.encryption.action.payload.istp.EncryptorItsp
+import net.veritran.encryption.action.payload.itsp.DecryptorItsp
+import net.veritran.encryption.action.payload.itsp.EncryptorItsp
 import net.veritran.encryption.infrastructure.adapter.outbound.ClassPathKeyLoaderProvider
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
